@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920 1080">
+  <!-- Generator: Adobe Illustrator 30.4.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 226)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #011826;
+      }
+
+      .st1, .st2 {
+        fill: #0ac4e0;
+      }
+
+      .st2 {
+        letter-spacing: .06em;
+      }
+
+      .st3 {
+        font-family: nebulax, nebulax;
+        font-size: 185.36px;
+      }
+    </style>
+  </defs>
+  <g>
+    <text class="st3" transform="translate(728.68 504.27)"><tspan class="st0"><tspan x="0" y="0">Long</tspan></tspan><tspan class="st0" x="0" y="222.44">Rel</tspan><tspan class="st2" x="408.72" y="222.44">a</tspan><tspan class="st0" x="592.41" y="222.44">tion</tspan></text>
+    <polygon class="st1" points="259.88 494.27 472.52 494.27 472.52 406.71 207.97 406.71 119.78 317.9 560.71 317.9 560.71 584.34 475.02 584.34 561.96 671.27 561.96 761.96 523.81 761.96 259.88 494.27"/>
+  </g>
+  <polygon class="st1" points="474.4 761.96 384.02 671.58 206.09 671.58 206.09 442.36 116.97 353.24 116.97 761.96 474.4 761.96"/>
+</svg>
