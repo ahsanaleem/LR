@@ -1,102 +1,56 @@
 'use client';
-
 import { useRef, useState } from 'react';
-import { gsap, useGSAP, prefersReducedMotion } from '@/lib/gsap';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useSite } from './SiteProvider';
-import LogoMark from '@/components/ui/LogoMark';
-import { loader } from '@/content/site';
+import { LRMark, Logo } from '../ui/Icons';
 
-const KEY = 'lr-loader-seen';
-
+// Full-screen intro: the LR mark's two strokes slide in, the wordmark wipes up, a % counter
+// runs to 100, then 10 vertical strips lift away (staggered) to reveal the page.
 export default function Loader() {
+  const root = useRef(null);
   const { setReady } = useSite();
-  const ref = useRef(null);
-  const top = useRef(null);
-  const bottom = useRef(null);
-  const count = useRef(null);
-  const seenRef = useRef(null);
   const [done, setDone] = useState(false);
 
   useGSAP(
     () => {
-      // Read once per mount (refs survive React strict-mode effect replays).
-      if (seenRef.current === null) {
-        seenRef.current = false;
-        try {
-          seenRef.current = sessionStorage.getItem(KEY) === '1';
-          sessionStorage.setItem(KEY, '1');
-        } catch {}
-      }
-      const fast = seenRef.current || prefersReducedMotion();
       const counter = { v: 0 };
-      const render = () => (count.current.textContent = String(Math.round(counter.v)).padStart(2, '0'));
-
-      // Exit wipe edge runs at 45° regardless of aspect ratio.
-      const slant = (window.innerHeight / window.innerWidth) * 100;
-      const exitFrom = `polygon(0% 0%, 100% 0%, 100% 100%, ${-slant}% 100%)`;
-      const exitTo = `polygon(${100 + slant}% 0%, 100% 0%, 100% 100%, 100% 100%)`;
-
-      const tl = gsap.timeline({
-        onComplete: () => setDone(true),
-      });
-      gsap.set('.loader__inner', { autoAlpha: 1 });
-      gsap.set(ref.current, { clipPath: exitFrom });
-
-      if (fast) {
-        tl.set([top.current, bottom.current], { x: 0, y: 0 })
-          .fromTo('.loader__letter', { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.01 })
-          .fromTo('.loader__bar', { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: 'power2.inOut' }, 0)
-          .to(counter, { v: 100, duration: 0.3, onUpdate: render }, 0)
-          .call(() => setReady(true), null, 0.35)
-          .to(ref.current, { clipPath: exitTo, duration: 0.45, ease: 'power3.inOut' }, 0.3);
-        return;
-      }
-
-      // Pieces start 120px apart along the 45° diagonal (in mark units) and lock together.
-      tl.set(top.current, { x: 150, y: -150, opacity: 0 })
-        .set(bottom.current, { x: -150, y: 150, opacity: 0 })
-        .to([top.current, bottom.current], { opacity: 1, duration: 0.3, ease: 'power1.out' })
-        .to(top.current, { x: -8, y: 8, duration: 0.85, ease: 'power4.out' }, 0.1)
-        .to(bottom.current, { x: 8, y: -8, duration: 0.85, ease: 'power4.out' }, 0.1)
-        .to([top.current, bottom.current], { x: 0, y: 0, duration: 0.25, ease: 'power2.out' }, 0.85)
-        .fromTo('.loader__glow', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.25, duration: 0.3, ease: 'power2.out' }, 0.9)
-        .to('.loader__glow', { opacity: 0, scale: 1.6, duration: 0.6, ease: 'power2.in' }, 1.2)
-        .fromTo(
-          '.loader__letter',
-          { opacity: 0, filter: 'blur(8px)' },
-          { opacity: 1, filter: 'blur(0px)', duration: 0.6, stagger: 0.035, ease: 'power2.out' },
-          0.35
-        )
-        .fromTo('.loader__bar', { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: 'power2.inOut' }, 0.15)
-        .to(counter, { v: 100, duration: 1.6, ease: 'power2.inOut', onUpdate: render }, 0.15)
-        .call(() => setReady(true), null, 2.15)
-        .to(ref.current, { clipPath: exitTo, duration: 0.9, ease: 'power3.inOut' }, 1.9);
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.ld_mark polygon', { opacity: 0, x: (i) => (i ? -60 : 60), y: (i) => (i ? 60 : -60), duration: 1.1, ease: 'power3.out', stagger: 0.15 })
+        .from('.ld_word img', { yPercent: 110, duration: 0.9 }, 0.45)
+        .to(counter, {
+          v: 100,
+          duration: 1.8,
+          ease: 'power1.inOut',
+          onUpdate: () => {
+            const el = root.current?.querySelector('.ld_count');
+            if (el) el.textContent = String(Math.round(counter.v)).padStart(3, '0');
+          },
+        }, 0)
+        .to('.ld_bar i', { scaleX: 1, duration: 1.8, ease: 'power1.inOut' }, 0)
+        .to('.ld_inner', { opacity: 0, y: -30, duration: 0.5, ease: 'power2.in' }, '+=0.15')
+        .to('.ld_strip', { yPercent: -100, duration: 0.8, ease: 'power4.inOut', stagger: { each: 0.05, from: 'start' } }, '-=0.1')
+        .add(() => setReady(true), '-=0.55')
+        .add(() => setDone(true));
     },
-    { scope: ref }
+    { scope: root }
   );
 
   if (done) return null;
-
   return (
-    <div ref={ref} className="loader" role="status" aria-live="polite" aria-label="Loading Long Relation">
-      <div className="loader__inner">
-        <div className="loader__mark">
-          <span className="loader__glow" aria-hidden="true" />
-          <LogoMark topRef={top} bottomRef={bottom} />
+    <div className="site_loader" ref={root} aria-hidden="true">
+      <div className="ld_strips">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className="ld_strip" />
+        ))}
+      </div>
+      <div className="ld_inner">
+        <LRMark className="ld_mark" size={96} />
+        <div className="ld_word"><Logo height={64} wordOnly alt="" /></div>
+        <div className="ld_meta">
+          <div className="ld_bar"><i /></div>
+          <span className="ld_count">000</span>
         </div>
-        <p className="loader__word" aria-hidden="true">
-          {loader.label.split('').map((c, i) => (
-            <span key={i} className={`loader__letter${c === 'A' && i > 5 ? ' is-accent' : ''}`}>
-              {c === ' ' ? ' ' : c}
-            </span>
-          ))}
-        </p>
-        <div className="loader__progress" aria-hidden="true">
-          <span className="loader__bar" />
-        </div>
-        <p className="loader__count" aria-hidden="true">
-          <span ref={count}>00</span>
-        </p>
       </div>
     </div>
   );

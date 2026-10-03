@@ -1,71 +1,38 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
-import { gsap, useGSAP } from '@/lib/gsap';
-import { trapFocus } from '@/lib/focusTrap';
+import { gsap } from 'gsap';
 import { useSite } from './SiteProvider';
-import ChamferCard from '@/components/ui/ChamferCard';
-import ContactForm from '@/components/ui/ContactForm';
-import { CloseIcon } from '@/components/ui/Icons';
-import { contactSection as c } from '@/content/site';
+import ContactForm from '../ui/ContactForm';
 
 export default function QuoteModal() {
-  const { modalOpen, closeModal } = useSite();
-  const ref = useRef(null);
-  const wasOpen = useRef(false);
-
-  useGSAP(
-    () => {
-      if (!modalOpen && !wasOpen.current) {
-        gsap.set(ref.current, { autoAlpha: 0 });
-        return;
-      }
-      wasOpen.current = modalOpen;
-      if (modalOpen) {
-        gsap.timeline()
-          .set(ref.current, { autoAlpha: 1 })
-          .fromTo('.modal__backdrop', { opacity: 0 }, { opacity: 1, duration: 0.4 })
-          .fromTo('.modal__card', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'expo.out' }, 0.05);
-      } else {
-        gsap.timeline()
-          .to('.modal__card', { y: 24, opacity: 0, duration: 0.3, ease: 'power2.in' })
-          .to('.modal__backdrop', { opacity: 0, duration: 0.3 }, 0.1)
-          .set(ref.current, { autoAlpha: 0 });
-      }
-    },
-    { scope: ref, dependencies: [modalOpen], revertOnUpdate: false }
-  );
+  const { modalOpen, setModalOpen } = useSite();
+  const root = useRef(null);
 
   useEffect(() => {
-    if (!modalOpen) return;
-    const release = trapFocus(ref.current.querySelector('.modal__card'));
-    const onKey = (e) => e.key === 'Escape' && closeModal();
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      release();
-    };
-  }, [modalOpen, closeModal]);
+    const el = root.current;
+    if (!el) return;
+    if (modalOpen) {
+      gsap.set(el, { display: 'grid' });
+      gsap.fromTo(el.querySelector('.modal_bg'), { opacity: 0 }, { opacity: 1, duration: 0.4 });
+      gsap.fromTo(el.querySelector('.modal_card'), { y: 60, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' });
+    } else {
+      gsap.to(el.querySelector('.modal_card'), { y: 40, opacity: 0, duration: 0.3, ease: 'power2.in' });
+      gsap.to(el.querySelector('.modal_bg'), { opacity: 0, duration: 0.35, onComplete: () => gsap.set(el, { display: 'none' }) });
+    }
+    const esc = (e) => e.key === 'Escape' && setModalOpen(false);
+    window.addEventListener('keydown', esc);
+    return () => window.removeEventListener('keydown', esc);
+  }, [modalOpen, setModalOpen]);
 
   return (
-    <div ref={ref} className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden={!modalOpen}>
-      <div className="modal__backdrop" onClick={closeModal} />
-      <ChamferCard className="modal__card" cut={28}>
-        <div className="modal__scroll" data-lenis-prevent>
-          <div className="modal__head">
-            <div>
-              <h2 id="modal-title" className="modal__title">
-                {c.formTitle}
-              </h2>
-              <p className="modal__sub">{c.formSub}</p>
-            </div>
-            <button type="button" className="icon-btn" onClick={closeModal} aria-label="Close dialog">
-              <CloseIcon />
-            </button>
-          </div>
-          <ContactForm idPrefix="modal" onSuccess={closeModal} />
-        </div>
-      </ChamferCard>
+    <div className="modal" ref={root} style={{ display: 'none' }} role="dialog" aria-modal="true" aria-label="Get a quote">
+      <div className="modal_bg" onClick={() => setModalOpen(false)} />
+      <div className="modal_card" data-lenis-prevent>
+        <button className="modal_close" aria-label="Close" onClick={() => setModalOpen(false)}>×</button>
+        <h3>Get a Quote</h3>
+        <p>Tell us about your product. We reply within 24 hours.</p>
+        <ContactForm onDone={() => setModalOpen(false)} compact />
+      </div>
     </div>
   );
 }

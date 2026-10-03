@@ -1,62 +1,38 @@
 'use client';
-
 import { useRef } from 'react';
-import { gsap, useGSAP, MQ } from '@/lib/gsap';
-import { useSite } from '@/components/global/SiteProvider';
-import SplitHeading from '@/components/ui/SplitHeading';
-import MagneticButton from '@/components/ui/MagneticButton';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { cta } from '@/content/site';
-
-const THREADS = [
-  'M-20 260 C 220 120, 420 360, 640 210 S 1020 60, 1240 190',
-  'M-20 120 C 180 220, 380 40, 620 130 S 980 300, 1240 90',
-  'M-20 360 C 260 300, 460 420, 700 330 S 1040 260, 1240 350',
-];
+import { useSite } from '../global/SiteProvider';
+import { Arrow } from '../ui/Icons';
 
 export default function CTA() {
-  const { openModal } = useSite();
-  const ref = useRef(null);
+  const root = useRef(null);
+  const { setModalOpen } = useSite();
+  useGSAP(() => {
+    gsap.fromTo('.cta_box', { scale: 0.85, borderRadius: 60, opacity: 0.4 }, { scale: 1, borderRadius: 24, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.cta_box', start: 'top bottom', end: 'center 60%', scrub: true } });
+    gsap.fromTo('.cta_box h2 .ln, .cta_box p, .cta_box .btn', { y: 50, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.cta_box', start: 'top 65%' } });
+    gsap.to('.cta_blob', { x: (i) => (i ? -60 : 60), y: (i) => (i ? 40 : -40), duration: 5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  }, { scope: root });
 
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(ref);
-      const mm = gsap.matchMedia();
-      gsap.set(q('.cta__pulse'), { strokeDasharray: '6 194', strokeDashoffset: 6 });
-      mm.add(MQ.motion, () => {
-        // Card scales up and its cut corner grows from 0 to full size.
-        gsap.fromTo(q('.cta')[0], { scale: 0.92, '--cut': '0px' }, { scale: 1, '--cut': '44px', ease: 'none', scrollTrigger: { trigger: ref.current, start: 'top 95%', end: 'top 35%', scrub: true } });
-        gsap.fromTo(q('.cta__text, .cta__action'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: q('.cta')[0], start: 'top 70%', once: true } });
-        q('.cta__pulse').forEach((p, i) => {
-          gsap.to(p, { strokeDashoffset: -100, duration: 3.2 + i * 0.6, ease: 'none', repeat: -1, delay: i * 0.8 });
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
+  // magnetic button
+  const mag = (e) => {
+    const b = e.currentTarget, r = b.getBoundingClientRect();
+    gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * 0.35, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.4 });
+  };
+  const unmag = (e) => gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1,0.4)' });
 
   return (
-    <section ref={ref} className="section section--dark cta-section" aria-labelledby="cta-title">
+    <section className="cta section_sm" ref={root}>
       <div className="container">
-        <div className="cta chamfer-solid">
-          <svg className="cta__threads" viewBox="0 0 1220 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-            {THREADS.map((d, i) => (
-              <g key={i}>
-                <path className="cta__thread" d={d} />
-                <path className="cta__pulse" d={d} pathLength="100" />
-              </g>
-            ))}
-          </svg>
-          <span className="cta__glow cta__glow--a" aria-hidden="true" />
-          <span className="cta__glow cta__glow--b" aria-hidden="true" />
-          <span className="hatch cta__hatch" aria-hidden="true" />
-          <div className="cta__content">
-            <SplitHeading id="cta-title" parts={cta.parts} className="cta__title" start="top 75%" />
-            <p className="cta__text">{cta.text}</p>
-            <div className="cta__action">
-              <MagneticButton onClick={openModal}>{cta.button}</MagneticButton>
-            </div>
-          </div>
+        <div className="cta_box">
+          <span className="cta_blob" /><span className="cta_blob b2" />
+          <span className="cta_pattern" />
+          <h2>{cta.title.split('\n').map((l) => <span className="ln" key={l}>{l}</span>)}</h2>
+          <p>{cta.text}</p>
+          <button className="btn btn_solid btn_glow" onClick={() => setModalOpen(true)} onMouseMove={mag} onMouseLeave={unmag}>
+            {cta.button} <Arrow size={20} />
+          </button>
         </div>
       </div>
     </section>

@@ -1,90 +1,62 @@
 'use client';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
-import { useRef } from 'react';
-import { gsap, useGSAP, MQ } from '@/lib/gsap';
-
-/** Dot + lagging ring. Desktop with a fine pointer only; disabled for touch and reduced motion. */
+// Three-layer cursor: instant dot, lagging ring, slow blurred glow.
+// Any element with data-cursor="view" (or "drag") morphs the ring into a labelled bubble.
 export default function Cursor() {
-  const ref = useRef(null);
   const dot = useRef(null);
   const ring = useRef(null);
+  const glow = useRef(null);
   const label = useRef(null);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MQ.fine, () => {
-        const root = document.documentElement;
-        root.classList.add('has-cursor');
-        gsap.set([dot.current, ring.current], { xPercent: -50, yPercent: -50, autoAlpha: 0 });
+  useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    document.documentElement.classList.add('has_cursor');
+    const set = (el, d) => ({ x: gsap.quickTo(el, 'x', { duration: d, ease: 'power3' }), y: gsap.quickTo(el, 'y', { duration: d, ease: 'power3' }) });
+    const d = set(dot.current, 0.05), r = set(ring.current, 0.35), g = set(glow.current, 0.9);
+    gsap.set([dot.current, ring.current, glow.current], { xPercent: -50, yPercent: -50, x: innerWidth / 2, y: innerHeight / 2 });
 
-        const dotX = gsap.quickSetter(dot.current, 'x', 'px');
-        const dotY = gsap.quickSetter(dot.current, 'y', 'px');
-        const ringX = gsap.quickTo(ring.current, 'x', { duration: 0.3, ease: 'power3.out' });
-        const ringY = gsap.quickTo(ring.current, 'y', { duration: 0.3, ease: 'power3.out' });
-        let state = 'default';
-        let visible = false;
+    const move = (e) => {
+      d.x(e.clientX); d.y(e.clientY);
+      r.x(e.clientX); r.y(e.clientY);
+      g.x(e.clientX); g.y(e.clientY);
+    };
+    const over = (e) => {
+      const t = e.target.closest('[data-cursor], a, button, input, textarea, label');
+      const ringEl = ring.current;
+      ringEl.classList.remove('is_view', 'is_link');
+      if (!t) return;
+      const mode = t.getAttribute('data-cursor');
+      if (mode) { ringEl.classList.add('is_view'); label.current.textContent = mode.toUpperCase(); }
+      else ringEl.classList.add('is_link');
+    };
+    const down = () => gsap.to(ring.current, { scale: 0.8, duration: 0.2 });
+    const up = () => gsap.to(ring.current, { scale: 1, duration: 0.3 });
+    const leave = () => gsap.to([dot.current, ring.current, glow.current], { opacity: 0, duration: 0.3 });
+    const enter = () => gsap.to([dot.current, ring.current, glow.current], { opacity: 1, duration: 0.3 });
 
-        const setState = (next, text = '') => {
-          if (next === state) return;
-          state = next;
-          ring.current.dataset.state = next;
-          label.current.textContent = text;
-          const size = next === 'media' ? 90 : next === 'link' ? 52 : 34;
-          gsap.to(ring.current, { width: size, height: size, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
-          gsap.to(label.current, { opacity: next === 'media' ? 1 : 0, duration: 0.25 });
-          gsap.to(dot.current, { scale: next === 'media' ? 0 : 1, duration: 0.25 });
-        };
-
-        const move = (e) => {
-          if (!visible) {
-            visible = true;
-            gsap.to([dot.current, ring.current], { autoAlpha: 1, duration: 0.3 });
-            gsap.set(ring.current, { x: e.clientX, y: e.clientY });
-          }
-          dotX(e.clientX);
-          dotY(e.clientY);
-          ringX(e.clientX);
-          ringY(e.clientY);
-        };
-        const over = (e) => {
-          const media = e.target.closest('[data-cursor]');
-          if (media) return setState('media', media.dataset.cursor.toUpperCase());
-          if (e.target.closest('a, button, [role="button"], label, input, textarea, select, .chip')) return setState('link');
-          setState('default');
-        };
-        const leaveWindow = () => {
-          visible = false;
-          gsap.to([dot.current, ring.current], { autoAlpha: 0, duration: 0.3 });
-        };
-        const down = () => gsap.to(ring.current, { scaleX: 1.15, scaleY: 0.85, duration: 0.15, ease: 'power2.out' });
-        const up = () => gsap.to(ring.current, { scaleX: 1, scaleY: 1, duration: 0.5, ease: 'elastic.out(1, .5)' });
-
-        window.addEventListener('pointermove', move, { passive: true });
-        document.addEventListener('pointerover', over);
-        document.documentElement.addEventListener('pointerleave', leaveWindow);
-        window.addEventListener('pointerdown', down);
-        window.addEventListener('pointerup', up);
-        return () => {
-          root.classList.remove('has-cursor');
-          window.removeEventListener('pointermove', move);
-          document.removeEventListener('pointerover', over);
-          document.documentElement.removeEventListener('pointerleave', leaveWindow);
-          window.removeEventListener('pointerdown', down);
-          window.removeEventListener('pointerup', up);
-        };
-      });
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
+    window.addEventListener('mousemove', move);
+    document.addEventListener('mouseover', over);
+    window.addEventListener('mousedown', down);
+    window.addEventListener('mouseup', up);
+    document.documentElement.addEventListener('mouseleave', leave);
+    document.documentElement.addEventListener('mouseenter', enter);
+    return () => {
+      window.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseover', over);
+      window.removeEventListener('mousedown', down);
+      window.removeEventListener('mouseup', up);
+      document.documentElement.removeEventListener('mouseleave', leave);
+      document.documentElement.removeEventListener('mouseenter', enter);
+    };
+  }, []);
 
   return (
-    <div ref={ref} className="cursor" aria-hidden="true">
-      <span ref={ring} className="cursor__ring" data-state="default">
-        <span ref={label} className="cursor__label" />
-      </span>
-      <span ref={dot} className="cursor__dot" />
-    </div>
+    <>
+      <div className="cursor_glow" ref={glow} aria-hidden="true" />
+      <div className="cursor_ring" ref={ring} aria-hidden="true"><span ref={label}>VIEW</span></div>
+      <div className="cursor_dot" ref={dot} aria-hidden="true" />
+    </>
   );
 }

@@ -1,121 +1,61 @@
 'use client';
-
 import { useRef, useState } from 'react';
-import { gsap, ScrollTrigger, Flip, useGSAP, prefersReducedMotion } from '@/lib/gsap';
-import { fadeUp } from '@/lib/anim';
-import SectionIndex from '@/components/ui/SectionIndex';
-import SplitHeading from '@/components/ui/SplitHeading';
-import ChamferCard from '@/components/ui/ChamferCard';
-import Marquee from '@/components/ui/Marquee';
-import StackIcon from '@/components/ui/StackIcon';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import { expertise } from '@/content/site';
+import SplitHeading from '../ui/SplitHeading';
 
 export default function Expertise() {
-  const ref = useRef(null);
-  const pill = useRef(null);
-  const [current, setCurrent] = useState('all');
+  const root = useRef(null);
+  const [active, setActive] = useState(0);
 
-  const placePill = (tab) => {
-    pill.current.style.left = `${tab.offsetLeft}px`;
-    pill.current.style.width = `${tab.offsetWidth}px`;
-  };
-
-  const { contextSafe } = useGSAP(
-    () => {
-      const q = gsap.utils.selector(ref);
-      placePill(q('.tabs__tab')[0]);
-      fadeUp(q('.expertise__intro, .tabs'), q('.expertise__intro')[0]);
-      fadeUp(q('.xcard'), q('.xgrid')[0], { stagger: 0.07, y: 0 });
-      // Re-place the pill after fonts change tab widths.
-      document.fonts?.ready.then(() => {
-        const tab = ref.current?.querySelector('.tabs__tab.is-active');
-        if (tab) placePill(tab);
-      });
-    },
-    { scope: ref }
-  );
-
-  const filter = contextSafe((id, tab) => {
-    if (id === current) return;
-    setCurrent(id);
-    const q = gsap.utils.selector(ref);
-    const reduced = prefersReducedMotion();
-    const duration = reduced ? 0 : 0.7;
-
-    // Tab pill slides with Flip.
-    const pillState = Flip.getState(pill.current);
-    placePill(tab);
-    Flip.from(pillState, { duration: reduced ? 0 : 0.5, ease: 'power3.inOut' });
-
-    // Cards re-arrange with Flip: leavers scale to 0.9 and fade, the rest move to their new slots.
-    const cards = q('.xcard');
-    const state = Flip.getState(cards, { props: 'opacity' });
-    cards.forEach((c) => (c.style.display = id === 'all' || c.dataset.cat === id ? '' : 'none'));
-    Flip.from(state, {
-      duration,
-      ease: 'power3.inOut',
-      absolute: true,
-      scale: true,
-      nested: true,
-      onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: duration * 0.9, delay: duration * 0.2 }),
-      onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.9, duration: duration * 0.6 }),
-      onComplete: () => ScrollTrigger.refresh(),
+  useGSAP(() => {
+    gsap.from('.exp_intro', { y: 30, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.exp_intro', start: 'top 90%' } });
+    gsap.utils.toArray('.exp_item').forEach((el, i) => {
+      gsap.from(el, { y: 50, opacity: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+      gsap.from(el.querySelector('.exp_line'), { scaleX: 0, transformOrigin: 'left', duration: 1.2, ease: 'power3.inOut', scrollTrigger: { trigger: el, start: 'top 88%' } });
+      // the item nearest the viewport centre becomes active
+      ScrollTrigger.create({ trigger: el, start: 'top 55%', end: 'bottom 55%', onToggle: (s) => s.isActive && setActive(i) });
     });
-  });
+    // orbit rings spin continuously
+    gsap.to('.exp_orbit', { rotate: 360, duration: 40, repeat: -1, ease: 'none' });
+    gsap.to('.exp_orbit2', { rotate: -360, duration: 60, repeat: -1, ease: 'none' });
+  }, { scope: root });
+
+  // crossfade logo when active changes
+  useGSAP(() => {
+    gsap.to('.exp_glyph:not(.on)', { opacity: 0, scale: 0.6, rotateY: 90, duration: 0.35, ease: 'power2.in', overwrite: true });
+    gsap.fromTo('.exp_glyph.on', { scale: 0.6, opacity: 0, rotateY: -90 }, { scale: 1, opacity: 1, rotateY: 0, duration: 0.7, delay: 0.15, ease: 'back.out(1.7)', overwrite: true });
+  }, { dependencies: [active], scope: root });
 
   return (
-    <section ref={ref} id="expertise" className="section section--surface expertise" aria-labelledby="expertise-title">
+    <section className="expertise section" ref={root}>
       <div className="container">
-        <header className="section__head section__head--split">
-          <div>
-            <SectionIndex index={expertise.index} label={expertise.label} />
-            <SplitHeading id="expertise-title" parts={expertise.parts} />
-          </div>
-          <p className="expertise__intro lead">{expertise.intro}</p>
-        </header>
-
-        <div className="tabs glass" role="tablist" aria-label="Filter technologies">
-          {expertise.filters.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              role="tab"
-              aria-selected={current === f.id}
-              aria-controls="xgrid"
-              className={`tabs__tab${current === f.id ? ' is-active' : ''}`}
-              onClick={(e) => filter(f.id, e.currentTarget)}
-            >
-              {f.label}
-            </button>
-          ))}
-          <span ref={pill} className="tabs__pill" aria-hidden="true" />
-        </div>
-
-        <div id="xgrid" className="xgrid" role="tabpanel">
-          {expertise.cards.map((c) => (
-            <ChamferCard as="article" key={c.id} className={`xcard xcard--${c.size}`} data-cat={c.cat} data-hover="scale:1.08" data-hover-target=".xcard__glyph">
-              <span className="xcard__beam" aria-hidden="true" />
-              <StackIcon name={c.icon} gif={c.gif} alt={`${c.title} logo`} className="xcard__glyph" />
-              <div className="xcard__body">
-                <p className="xcard__cat">{c.catLabel}</p>
-                <h3 className="xcard__title">{c.title}</h3>
-                <p className="xcard__text">{c.text}</p>
+        <SplitHeading parts={[[expertise.title[0], false], [expertise.title[1], true]]} className="xl" />
+        <p className="exp_intro">{expertise.intro}</p>
+        <div className="exp_grid">
+          <div className="exp_list">
+            {expertise.items.map((it, i) => (
+              <div key={it.title} className={`exp_item ${active === i ? 'is_active' : ''}`} onMouseEnter={() => setActive(i)}>
+                <span className="exp_cat">{it.cat}</span>
+                <h3>{it.title}</h3>
+                <p>{it.text}</p>
+                <span className="exp_line" />
               </div>
-            </ChamferCard>
-          ))}
-        </div>
-      </div>
-
-      <div className="expertise__marquees" role="group" aria-label="More tools we use">
-        {expertise.marquee.map((row, i) => (
-          <Marquee key={i} direction={i % 2 ? 'right' : 'left'} duration={34 + i * 6} boost>
-            {row.map((t) => (
-              <span key={t} className="tech-pill">
-                {t}
-              </span>
             ))}
-          </Marquee>
-        ))}
+          </div>
+          <div className="exp_visual">
+            <div className="exp_sticky">
+              <span className="exp_orbit" /><span className="exp_orbit2" />
+              <span className="exp_halo" />
+              {expertise.items.map((it, i) => (
+                <span key={it.title} className={`exp_glyph ${active === i ? 'on' : ''}`}><img src={it.logo} alt={`${it.title} logo`} /></span>
+              ))}
+              <span className="exp_count">{String(active + 1).padStart(2, '0')} / {String(expertise.items.length).padStart(2, '0')}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

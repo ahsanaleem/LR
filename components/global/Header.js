@@ -1,150 +1,75 @@
 'use client';
-
-import { useRef, useState } from 'react';
-import { gsap, ScrollTrigger, Flip, useGSAP } from '@/lib/gsap';
+import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { brand, nav } from '@/content/site';
 import { useSite } from './SiteProvider';
-import LogoMark from '@/components/ui/LogoMark';
-import Button from '@/components/ui/Button';
-import Menu from './Menu';
-import { nav } from '@/content/site';
+import { Logo } from '../ui/Icons';
 
 export default function Header() {
-  const { ready, openModal, menuOpen, setMenuOpen, lenis } = useSite();
-  const ref = useRef(null);
-  const pill = useRef(null);
-  const indicator = useRef(null);
-  const burger = useRef(null);
-  const [active, setActive] = useState(null);
+  const { ready, setModalOpen, scrollTo } = useSite();
+  const [open, setOpen] = useState(false);
+  const root = useRef(null);
+  const tl = useRef(null);
 
-  // Drop in after the loader.
   useGSAP(
     () => {
-      if (!ready) {
-        gsap.set(ref.current, { y: -40, autoAlpha: 0 });
-        return;
-      }
-      gsap.fromTo(ref.current, { y: -40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, ease: 'expo.out', delay: 0.4 });
+      // Dropdown menu: panel unclips from the top-right corner, links rise in.
+      tl.current = gsap
+        .timeline({ paused: true, defaults: { ease: 'power3.out' } })
+        .set('.menu_panel', { pointerEvents: 'auto' })
+        .fromTo('.menu_panel', { clipPath: 'inset(0% 0% 100% 100% round 14px)' }, { clipPath: 'inset(0% 0% 0% 0% round 14px)', duration: 0.6, ease: 'power4.inOut' })
+        .from('.menu_panel .menu_link', { y: 24, opacity: 0, stagger: 0.05, duration: 0.45 }, '-=0.25')
+        .from('.menu_panel .menu_contact > *', { y: 12, opacity: 0, stagger: 0.04, duration: 0.35 }, '-=0.25');
     },
-    { scope: ref, dependencies: [ready] }
+    { scope: root }
   );
 
-  // Hide on scroll down, show on scroll up, compact after 80px.
-  useGSAP(
-    () => {
-      if (!lenis) return;
-      let hidden = false;
-      let compact = false;
-      const onScroll = ({ scroll, direction }) => {
-        const shouldHide = direction === 1 && scroll > 240 && !menuOpen;
-        if (shouldHide !== hidden) {
-          hidden = shouldHide;
-          gsap.to(pill.current, { yPercent: hidden ? -180 : 0, duration: 0.6, ease: hidden ? 'power3.in' : 'expo.out', overwrite: 'auto' });
-        }
-        const shouldCompact = scroll > 80;
-        if (shouldCompact !== compact) {
-          compact = shouldCompact;
-          gsap.to(pill.current, { '--pill-pad': compact ? '6px' : '10px', duration: 0.4, ease: 'power2.out' });
-        }
-      };
-      lenis.on('scroll', onScroll);
-      return () => lenis.off('scroll', onScroll);
-    },
-    { scope: ref, dependencies: [lenis, menuOpen] }
-  );
+  useGSAP(() => {
+    if (!ready) return;
+    gsap.fromTo(root.current.querySelectorAll('.hdr_anim'), { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power3.out', delay: 0.3 });
+  }, { dependencies: [ready], scope: root });
 
-  // Track which section is in view.
-  useGSAP(
-    () => {
-      // Measure on every scroll update and after each refresh, so the result never depends on toggle order.
-      const compute = () => {
-        const mid = window.innerHeight / 2;
-        let found = null;
-        for (const { id } of nav.links) {
-          const r = document.getElementById(id)?.getBoundingClientRect();
-          if (r && r.top <= mid && r.bottom > mid) found = id;
-        }
-        setActive(found);
-      };
-      const st = ScrollTrigger.create({ start: 0, end: 'max', onUpdate: compute });
-      ScrollTrigger.addEventListener('refresh', compute);
-      compute();
-      return () => {
-        st.kill();
-        ScrollTrigger.removeEventListener('refresh', compute);
-      };
-    },
-    { scope: ref }
-  );
+  useEffect(() => {
+    if (!tl.current) return;
+    open ? tl.current.timeScale(1).play() : tl.current.timeScale(1.6).reverse();
+  }, [open]);
 
-  // Slide the indicator between links with Flip.
-  useGSAP(
-    () => {
-      const ind = indicator.current;
-      const link = active && ref.current.querySelector(`.header__link[data-id="${active}"]`);
-      if (!link) {
-        gsap.to(ind, { opacity: 0, duration: 0.3 });
-        return;
-      }
-      const wasHidden = gsap.getProperty(ind, 'opacity') < 0.05;
-      const state = Flip.getState(ind);
-      ind.style.left = `${link.offsetLeft}px`;
-      ind.style.width = `${link.offsetWidth}px`;
-      if (wasHidden) {
-        gsap.to(ind, { opacity: 1, duration: 0.3 });
-        return;
-      }
-      Flip.from(state, { duration: 0.6, ease: 'power3.inOut' });
-    },
-    { scope: ref, dependencies: [active], revertOnUpdate: false }
-  );
+  useEffect(() => {
+    const esc = (e) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', esc);
+    return () => window.removeEventListener('keydown', esc);
+  }, []);
 
-  // Burger lines morph into an X (±45°, the brand angle).
-  useGSAP(
-    () => {
-      const [a, b] = burger.current.children;
-      gsap.to(a, { y: menuOpen ? 4 : 0, rotation: menuOpen ? 45 : 0, duration: 0.5, ease: 'power3.inOut' });
-      gsap.to(b, { y: menuOpen ? -4 : 0, rotation: menuOpen ? -45 : 0, duration: 0.5, ease: 'power3.inOut' });
-    },
-    { scope: ref, dependencies: [menuOpen], revertOnUpdate: false }
-  );
+  const go = (e, href) => {
+    if (href.startsWith('#') && href.length > 1) { e.preventDefault(); scrollTo(href); }
+    setOpen(false);
+  };
 
   return (
-    <>
-      <header ref={ref} className="header">
-        <div ref={pill} className="header__pill glass">
-          <a href="#top" className="header__brand" aria-label="Long Relation — back to top">
-            <LogoMark />
-          </a>
-          <nav className="header__nav" aria-label="Primary">
-            <ul className="header__links">
-              {nav.links.map((l) => (
-                <li key={l.id}>
-                  <a className={`header__link${active === l.id ? ' is-active' : ''}`} data-id={l.id} href={`#${l.id}`} aria-current={active === l.id ? 'true' : undefined}>
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <span ref={indicator} className="header__indicator" aria-hidden="true" style={{ opacity: 0 }} />
-          </nav>
-          <Button size="sm" className="header__cta" onClick={openModal}>
-            {nav.cta}
-          </Button>
-          <button
-            ref={burger}
-            type="button"
-            className="burger"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            aria-controls="site-menu"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span />
-            <span />
-          </button>
-        </div>
-      </header>
-      <Menu burgerRef={burger} />
-    </>
+    <header className="site_header" ref={root}>
+      <a href="#top" className="logo hdr_anim" onClick={(e) => go(e, '#top')}>
+        <Logo height={40} alt={brand.short} />
+      </a>
+      <button className="btn btn_solid hdr_anim quote_btn" onClick={() => setModalOpen(true)}>GET A QUOTE</button>
+      <div className="menu_wrap">
+        <button className={`menu_btn ${open ? 'is_open' : ''}`} aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+          {Array.from({ length: 9 }).map((_, i) => <span key={i} className="cell" />)}
+        </button>
+        <nav className="menu_panel" aria-hidden={!open}>
+          <ul>
+            {nav.map((n) => (
+              <li key={n.label}><a className="menu_link" href={n.href} onClick={(e) => go(e, n.href)}>{n.label}</a></li>
+            ))}
+          </ul>
+          <div className="menu_contact">
+            <small>CONTACT US</small>
+            <a href={`tel:${brand.phone}`}>{brand.phone}</a>
+            <a href={`mailto:${brand.email}`}>{brand.email}</a>
+            <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>
+          </div>
+        </nav>
+      </div>
+    </header>
   );
 }

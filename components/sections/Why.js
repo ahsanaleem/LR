@@ -1,84 +1,38 @@
 'use client';
-
 import { useRef } from 'react';
-import { gsap, useGSAP, MQ, prefersReducedMotion } from '@/lib/gsap';
-import { sectionWipe, countUp } from '@/lib/anim';
-import SectionIndex from '@/components/ui/SectionIndex';
-import SplitHeading from '@/components/ui/SplitHeading';
-import ChamferCard from '@/components/ui/ChamferCard';
-import { CheckIcon } from '@/components/ui/Icons';
-import { trackGlow } from './About';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { why } from '@/content/site';
+import SplitHeading from '../ui/SplitHeading';
 
 export default function Why() {
-  const ref = useRef(null);
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(ref);
-      const reduced = prefersReducedMotion();
-      sectionWipe(ref.current, reduced);
-      const mm = gsap.matchMedia();
-
-      mm.add(MQ.motion, () => {
-        gsap.fromTo(q('.stat, .promises'), { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: q('.why__grid')[0], start: 'top 85%', once: true } });
-      });
-
-      // Count up, grow the bar to a value-based width, then fade the label up.
-      q('.stat').forEach((tile, i) => {
-        const s = why.stats[i];
-        const t = gsap.utils.selector(tile);
-        const tl = gsap.timeline({ scrollTrigger: { trigger: tile, start: 'top 85%', once: true } });
-        tl.add(countUp(t('[data-count]')[0], s.value, { decimals: s.decimals, suffix: s.suffix, duration: reduced ? 0.01 : 2 }), 0.2)
-          .fromTo(t('.stat__bar-fill'), { scaleX: 0 }, { scaleX: s.bar, duration: reduced ? 0.01 : 1.8, ease: 'power3.out' }, 0.3)
-          .fromTo(t('.stat__label'), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out' }, 0.9);
-      });
-
-      // Promise checks draw in.
-      gsap.timeline({ scrollTrigger: { trigger: q('.promises')[0], start: 'top 92%', once: true } })
-        .fromTo(q('.promises li'), { x: -16, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'expo.out', stagger: 0.15 }, 0.2)
-        .fromTo(q('.promises .check__tick'), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out', stagger: 0.15 }, 0.45);
-
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
+  const root = useRef(null);
+  useGSAP(() => {
+    gsap.utils.toArray('.stat').forEach((el) => {
+      const num = el.querySelector('.stat_num b');
+      const target = +num.dataset.v;
+      const o = { v: 0 };
+      gsap.to(o, { v: target, duration: 2.2, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' }, onUpdate: () => (num.textContent = Math.round(o.v)) });
+      gsap.from(el, { y: 60, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+      gsap.from(el.querySelector('.stat_line'), { scaleX: 0, transformOrigin: 'left', duration: 1.4, ease: 'power3.inOut', scrollTrigger: { trigger: el, start: 'top 85%' } });
+    });
+    // glowing orb follows the scroll diagonally
+    gsap.fromTo('.why_orb', { x: '-20vw', y: 200 }, { x: '10vw', y: -100, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: true } });
+  }, { scope: root });
 
   return (
-    <section ref={ref} id="why" className="section section--paper wipe why" aria-labelledby="why-title">
-      <div className="container">
-        <header className="section__head">
-          <SectionIndex index={why.index} label={why.label} />
-          <SplitHeading id="why-title" parts={why.parts} />
-        </header>
-
-        {/* PLACEHOLDER — figures live in content/site.js */}
-        <div className="why__grid" onPointerMove={trackGlow}>
+    <section className="why section" ref={root}>
+      <span className="why_orb" aria-hidden="true" />
+      <div className="container why_grid">
+        <SplitHeading parts={why.title} className="lg" block />
+        <div className="stats">
           {why.stats.map((s) => (
-            <ChamferCard key={s.label} className="stat tile--light" data-glow>
-              <p className="stat__num">
-                <span data-count>
-                  {s.value}
-                  {s.suffix}
-                </span>
-              </p>
-              <span className="stat__bar" aria-hidden="true">
-                <span className="stat__bar-fill" />
-              </span>
-              <p className="stat__label">{s.label}</p>
-            </ChamferCard>
+            <div className="stat" key={s.label}>
+              <div className="stat_num"><b data-v={s.value}>0</b>{s.suffix}</div>
+              <span className="stat_line" />
+              <span className="stat_label">{s.label}</span>
+            </div>
           ))}
-          <ChamferCard className="promises tile--light" data-glow cut={32}>
-            <p className="promises__title">{why.promisesTitle}</p>
-            <ul>
-              {why.promises.map((p) => (
-                <li key={p}>
-                  <CheckIcon size={28} />
-                  <span>{p}</span>
-                </li>
-              ))}
-            </ul>
-          </ChamferCard>
         </div>
       </div>
     </section>

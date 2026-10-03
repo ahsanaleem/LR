@@ -1,44 +1,20 @@
 'use client';
-
-import { useEffect, useRef } from 'react';
-import Image from 'next/image';
-import { mountPlaceholder } from '@/lib/placeholder';
-import { prefersReducedMotion } from '@/lib/gsap';
-
-let seedCounter = 1;
-
-/** Animated brand placeholder: navy gradient, drifting connected nodes, diagonal hatch, 45° light sweep. */
-export function Placeholder({ label }) {
-  const canvas = useRef(null);
-  useEffect(() => mountPlaceholder(canvas.current, { seed: seedCounter++, still: prefersReducedMotion() }), []);
+import { MARK_POLYS } from './Icons';
+// Renders a looping muted video, an image, or (when empty) animated
+// placeholder artwork so the layout always looks finished.
+export default function Media({ media = {}, hue = 190, variant = 'scene', label, className = '' }) {
+  if (media.video)
+    return <video className={`media ${className}`} src={media.video} poster={media.poster} autoPlay muted loop playsInline preload="metadata" />;
+  if (media.image) return <img className={`media ${className}`} src={media.image} alt={label || ''} loading="lazy" />;
   return (
-    <div className="ph" aria-hidden="true">
-      <canvas ref={canvas} className="ph__canvas" />
-      <span className="ph__hatch" />
-      <span className="ph__sweep" />
-      {label && <span className="ph__label">{label}</span>}
-    </div>
-  );
-}
-
-/**
- * Video, image or animated placeholder.
- * media = { video, poster } | { image } | {}
- * `.media__inner` is the element sections animate (scale / parallax) inside the `.media` mask.
- */
-export default function Media({ media = {}, alt = '', label, ratio, className = '', sizes = '(max-width: 768px) 100vw, 50vw', priority = false, children, ...rest }) {
-  return (
-    <div className={`media ${className}`} style={ratio ? { aspectRatio: ratio } : undefined} {...rest}>
-      <div className="media__inner">
-        {media.video ? (
-          <video className="media__el" src={media.video} poster={media.poster} autoPlay muted loop playsInline preload="metadata" />
-        ) : media.image ? (
-          <Image className="media__el" src={media.image} alt={alt} fill sizes={sizes} priority={priority} />
-        ) : (
-          <Placeholder label={label} />
-        )}
-      </div>
-      {children}
+    <div className={`media art art_${variant} ${className}`} style={{ '--h': hue }} aria-hidden="true">
+      <span className="art_blob b1" />
+      <span className="art_blob b2" />
+      <span className="art_blob b3" />
+      <span className="art_grid" />
+      <svg className="art_hex" viewBox="100 300 480 480">{MARK_POLYS.map((p) => <polygon key={p} points={p} />)}</svg>
+      <span className="art_scan" />
+      {label && <span className="art_label">{label}</span>}
     </div>
   );
 }

@@ -1,133 +1,90 @@
-# Long Relation — studio website
+# Long Relation — animated studio website
 
-Single-page marketing site for **Long Relation**, an AI-first software product studio.
-Next.js 15 (App Router) · React 19 · plain JavaScript · GSAP 3 (ScrollTrigger, Flip, `@gsap/react`) · Lenis · Swiper 11.
+Next.js 15 (App Router) · GSAP 3 + ScrollTrigger · Lenis smooth scroll · Swiper 11 · Geist font.
+It uses the same section layout and motion approach as the reference site, with original Long Relation copy and generated artwork, so there are no copyrighted assets.
 
-## Setup
+## Run
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production build
-npm start        # serve the production build
+npm run dev        # http://localhost:3000
+npm run build && npm start   # production
 ```
 
-Deploys to Vercel as-is: import the repo, keep the defaults, no environment variables needed.
+Deploys as-is to Vercel (static page, no env vars).
 
-## Project structure
+## Editing content
+
+**All copy, links, numbers and media live in `content/site.js`.** Lines marked `// PLACEHOLDER` must be replaced before launch:
+phone, email, address, project names, team members, award entries, stats and client reviews.
+
+### Adding real videos and images
+Put files in `public/media/` and reference them in `content/site.js`:
+
+```js
+media: { video: '/media/about.mp4', poster: '/media/about.jpg' }
+// or
+media: { image: '/media/project-1.jpg' }
+```
+
+When `media` is empty, an animated placeholder (gradient blobs, grid and hexagon) is shown, so the layout always looks finished.
+The hero shows a procedural canvas "iris" until you set `hero.media.video`.
+
+Team photos: set `photo: '/media/team/name.jpg'` (portrait, at least 600×760).
+
+### Brand colour
+Change `--accent` and `--accent-rgb` at the top of `app/globals.css`. Everything (cursor, glows, buttons, headings) follows it.
+
+## File map
 
 ```
 app/
-  layout.js            fonts (Unbounded + Manrope via next/font), metadata, .no-js → .js swap
+  layout.js            fonts, metadata, Lenis CSS
   page.js              section order
-  globals.css          tokens → base → utilities → global layers → sections → responsive
-  icon.svg             favicon (the LR mark)
+  globals.css          all styles (tokens → global layers → sections → responsive)
 components/
-  global/              SiteProvider (Lenis, context, hover FX), Loader, Cursor, Header, Menu,
-                       QuoteModal, Toasts, ScrollProgress
-  sections/            Hero (+ ConnectionField canvas), About, Services, Expertise, Work,
-                       Engagement, AI, Why, Awards, Team, CTA, Reviews, Contact, Footer
-  ui/                  SplitHeading, SectionIndex, Reveal, ChamferCard, Media, Marquee,
-                       Button, MagneticButton, LogoMark, ContactForm, Icons
-content/site.js        ALL copy, links, numbers and media paths
-lib/                   gsap.js (plugin registration), anim.js (shared reveals), placeholder.js
-                       (media placeholder renderer), focusTrap.js
-public/brand/          logo-dark/-light .svg + .png
-public/media/          put your images and videos here
+  global/
+    SiteProvider.js    Lenis + GSAP ticker sync, modal state, toasts, scrollTo()
+    Loader.js          intro: hexagon draws itself, letters rise, counter goes 000→100, 10 strips lift away
+    Cursor.js          dot + ring + glow; [data-cursor="view"|"drag"] turns the ring into a labelled bubble
+    Header.js          logo, Get a Quote, 3×3 dot menu button with a dropdown that unclips from the corner
+    QuoteModal.js      popup form (Get a Quote / Book a Consultation)
+  sections/            Hero, About, Services, Expertise, Featured, Engagement, GrowAI,
+                       Why, Awards, Team, CTA, Reviews, Contact, Footer
+  ui/
+    SplitHeading.js    big uppercase headings, word-by-word mask reveal
+    Reveal.js          generic staggered fade-up
+    Media.js           video / image / animated placeholder
+    HeroCanvas.js      procedural iris background
+    ContactForm.js     floating labels, validation, toast (wire to your API)
+    Icons.js           inline SVG icons + hexagon logo
+content/site.js        ← edit me
 ```
-
-## Rebranding
-
-Everything editable lives in **`content/site.js`**: copy, headings, stats, projects, team, awards,
-reviews, contact details, social links and media paths. Every placeholder value is marked
-`// PLACEHOLDER` — search for it before launch.
-
-**Headings** use `parts`: `[['We build the '], ['relationship', true], [' behind the product']]`.
-`true` marks the cyan accent word (with the drawn underline); `['\n']` forces a line break.
-
-### Swapping media
-
-Every media slot takes one of these:
-
-```js
-media: { image: '/media/about.jpg' }
-media: { video: '/media/reel.mp4', poster: '/media/reel.jpg' }
-media: {}   // animated brand placeholder (navy gradient, drifting nodes, hatch, light sweep)
-```
-
-Put the files in `public/media/`. Slots: `about.media`, each `services.items[].media`,
-each `team.members[].media` (portrait; initials are shown when empty)
-and each `reviews.videos[].media` (`video` plays inline when the play button is pressed).
-
-### Portfolio (Work section)
-
-The three case studies (Manani, Menna, Menna Web) come from lr.com.sa; their screenshots are in
-`public/media/work/`. Each project in `work.projects` sets `device: 'phone'` (portrait screenshot) or
-`'browser'` (wide screenshot), plus `media: { image, width, height }` with the image's real pixel size.
-Add or remove projects freely — the accordion adapts to any count.
-
-### Colours
-
-Edit the tokens at the top of `app/globals.css` (`--brand`, `--brand-rgb`, `--ink`, `--bg`, `--paper`, …).
-If you change `--brand`, also update `--brand-rgb` (used for glows) and the hard-coded RGB values in
-`components/sections/ConnectionField.js` and `lib/placeholder.js` (canvas drawing can't read CSS variables).
-
-### Logos
-
-- `public/brand/logo-light.png` (white wordmark, dark backgrounds) is used in the footer and the menu.
-- `public/brand/logo-dark.png` (navy wordmark) is there for light backgrounds.
-- The SVG lockups reference the font "nebulax" as live text, which is not embedded, so the site uses
-  the PNGs for the full lockup and draws the mark as inline SVG (`components/ui/LogoMark.js`, shapes
-  in `components/ui/Icons.js`). Update `brand.logoWidth/logoHeight` in `site.js` if you replace the PNGs.
-
-### Contact form
-
-`components/ui/ContactForm.js` validates on the client and simulates a request. Replace the block marked
-`// TODO: POST to real API` with your endpoint (for example a Next.js route handler, Formspree or a CRM webhook).
 
 ## Animation inventory
 
-| Section | Effect | Trigger | Library |
-|---|---|---|---|
-| Global | Smooth inertia scroll (duration 1.1, expo-style easing), stopped during loader/menu/modal | always | Lenis + gsap.ticker |
-| Global | Scroll progress line (`scaleX`) | scroll, scrubbed | ScrollTrigger |
-| Global | Custom cursor: dot + lagging ring, grows on links, VIEW/DRAG disc, squash on press | pointer (fine pointers only) | GSAP quickTo / matchMedia |
-| Global | Hover transforms (`data-hover`): slide, lift, icon rotate | pointer hover | GSAP (SiteProvider HoverFx) |
-| Global | Button diagonal fill sweep | hover | CSS clip-path |
-| Global | Section top-edge diagonal wipe (About, Services, Why, Awards, Contact, Footer) | scroll, scrubbed | ScrollTrigger |
-| Loader | Mark pieces slide together along 45° and lock, glow pulse, letters un-blur, 00→100 counter, 45° exit wipe; shortened on repeat visits | page load | GSAP timeline |
-| Header | Drop in, hide on scroll down / show on scroll up, compact after 80px, active-link indicator | loader end / Lenis scroll | GSAP, Flip |
-| Header | Burger lines rotate to ±45° X | menu toggle | GSAP |
-| Menu | Diagonal wipe from top-right, staggered links, node + 16px slide on hover | open/close | GSAP |
-| Modal | Backdrop fade, card rises (expo.out), focus trap | open/close | GSAP |
-| Toasts | Slide up, 4s shrinking progress line | toast() | GSAP |
-| Hero | Canvas nodes gather into the LR mark, hold, loosen into a breathing mark; pointer pushes/links nodes | after loader | Canvas 2D + rAF |
-| Hero | Canvas fade/scale, words rise from masks, underline draws, sub/buttons fade, chips pop + count up | after loader | GSAP timeline |
-| Hero | Content lifts/fades; mark rotates 8° and drifts down | scroll, scrubbed | ScrollTrigger |
-| All headings | Words rise from yPercent 110 (stagger .05), accent underline draws | heading at 85% of viewport | ScrollTrigger |
-| About | Line-by-line cyan highlight bar + text 30%→100% | scroll, scrubbed | ScrollTrigger |
-| About | Bento tiles rise, media scales 1.15→1, mark assembles, count-up, mouse-following border glow | scroll / hover | ScrollTrigger, CSS vars |
-| Services | Sticky list with progress line and active item; panels open from the cut corner, icon strokes draw, checklist staggers, media parallax, ±6° tilt | scroll / pointer | ScrollTrigger, GSAP quickTo |
-| Expertise | Filter re-layout (leavers scale to .9 and fade), sliding tab pill, border beam on hover, glyph rotate | click / hover | Flip, CSS @property |
-| Expertise | Two opposing marquees, scroll-velocity boost, pause on hover | always / scroll | GSAP + ScrollTrigger |
-| Work | Accordion flex 1↔4, media fade + scale 1.1→1, content stagger, diagonal entrance (stacked cards on tablet/mobile) | hover / focus / scroll | GSAP, ScrollTrigger |
-| Engagement | Cards rise, relation threads draw, nodes pop (back.out(2)), looping pulses that speed up on hover | scroll / hover | ScrollTrigger, GSAP |
-| Engagement | Compare table height animation | click | Flip |
-| AI | Scrubbed diagonal clip reveal, mouse-following glow, floating chips, looping agent workflow demo (paused off-screen) | scroll / pointer | ScrollTrigger, GSAP |
-| Why | Count-ups, value-based bars, labels; promise checks draw in | scroll | ScrollTrigger |
-| Awards | Award ribbon marquee (velocity boost), spinning conic badge rings (faster on hover), spotlight | always / hover | GSAP, CSS |
-| Team | Cards rise, portrait parallax, portrait 1.06→1 on hover, diagonal bio panel, LinkedIn tile | scroll / hover | ScrollTrigger, CSS clip-path |
-| CTA | Card scales .92→1 and its cut corner grows; travelling light pulses; magnetic button (elastic.out(1, .4)) | scroll / pointer | ScrollTrigger, GSAP |
-| Reviews | Two opposing quote marquees (pause on hover); creative video slider | always / drag | CSS animation, Swiper |
-| Contact | Diagonal reveal of the navy card, staggered form; mark drifts apart/together (10s loop); phone tile rings | scroll / hover | ScrollTrigger, GSAP |
-| Footer | Giant wordmark words slide in from opposite sides; mark pieces lock together | scroll, scrubbed | ScrollTrigger |
+| Where | Effect | How |
+|---|---|---|
+| Whole page | Inertia smooth scroll | Lenis (duration 1.2) driven by `gsap.ticker`, synced with ScrollTrigger |
+| Load | Hexagon stroke draws itself, letters stagger up, % counter, 10-strip curtain wipe | GSAP timeline in `Loader.js` |
+| Cursor | Dot (instant), ring (0.35s lag), glow (0.9s lag); "VIEW"/"DRAG" bubble | `gsap.quickTo` |
+| Menu | Panel `clip-path` unclips from the top-right corner, links stagger in; dots cross-fade | Paused timeline played/reversed |
+| Hero | Background zooms in from 1.25×, headline words rise, tagline slides in; on scroll the content fades/lifts, background parallax, giant word drifts | Timeline + scrubbed tweens |
+| About | Each word brightens as you read (scrub); video card expands from an inset rounded card to full width | `clip-path` scrub |
+| Services | Icon pops, title/text/list stagger; media card slides in with 3D rotateY; inner parallax; mouse tilt; list arrow on hover | ScrollTrigger timelines + CSS |
+| Expertise | Active row follows scroll position or hover; right panel is sticky with orbiting rings; logo glyph flips in | ScrollTrigger `onToggle` + CSS sticky |
+| Featured | Cards fade up 80px; sticky stacked deck (previous card shrinks/dims); hover reveals media + "View Case Study" | Sticky + scrub, CSS hover |
+| Engagement | Cards fly up with a slight rotation, network lines draw, nodes pop, pulse ring loops | Stagger + strokeDashoffset |
+| Grow AI | Card unclips from rounded inset, background parallax, floating chips | Scrub + yoyo loops |
+| Why | Numbers count up, dashed lines draw, glowing orb drifts | Tweened counter |
+| Awards | Staggered grid entrance; mouse-follow spotlight; badge "tada" on hover | CSS vars + keyframes |
+| Team | **Pinned horizontal scroll** with photo parallax and a progress bar (desktop); fade-ups on mobile | `pin` + `containerAnimation` |
+| CTA | Box scales up while corners tighten; blobs float; magnetic button | Scrub + quickTo |
+| Reviews | Quote slider (fade) linked to media slider (scale/grayscale for inactive slides) | Swiper Controller |
+| Contact | Panels slide in; floating labels; validation + toast | Timeline + CSS |
+| Footer | Giant wordmark letters rise in (scrub); back-to-top smooth scroll | Scrub |
 
-## Reliability and accessibility notes
+Accessibility: honours `prefers-reduced-motion`, the custom cursor is disabled on touch devices, Escape closes the menu and modal, and buttons have labels.
 
-- All GSAP code runs in `useGSAP` scoped to the section ref; desktop-only effects use `gsap.matchMedia()`.
-- Hidden starting states are set by GSAP, not CSS. Without JavaScript (`.no-js`) every section stays visible.
-- CSS transitions only touch `clip-path`, `color`, `background` and `box-shadow`; GSAP owns transforms.
-- Canvas loops stop when off-screen or when the tab is hidden, and devicePixelRatio is capped at 2.
-- `prefers-reduced-motion`: no smooth wheel, the hero draws one static frame of the mark, marquees stop,
-  scrubbed effects become simple fades, and CSS animations are cut.
-- Escape closes the menu and modal; focus is trapped in both and returned on close. Visible `:focus-visible` rings.
+## Hooking up the form
+In `components/ui/ContactForm.js` replace the `TODO` line with a POST to your endpoint (for example a Next.js route handler that forwards to Zoho CRM, HubSpot or email).

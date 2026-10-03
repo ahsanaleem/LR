@@ -1,88 +1,65 @@
 'use client';
-
 import { useRef } from 'react';
-import { gsap, useGSAP, MQ } from '@/lib/gsap';
-import SectionIndex from '@/components/ui/SectionIndex';
-import SplitHeading from '@/components/ui/SplitHeading';
-import ChamferCard from '@/components/ui/ChamferCard';
-import Media from '@/components/ui/Media';
-import { SocialIcon } from '@/components/ui/Icons';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { team } from '@/content/site';
+import SplitHeading from '../ui/SplitHeading';
+import { Social } from '../ui/Icons';
 
 export default function Team() {
-  const ref = useRef(null);
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(ref);
-      const mm = gsap.matchMedia();
-      mm.add(MQ.motion, () => {
-        gsap.fromTo(q('.lead'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: q('.lead')[0], start: 'top 88%', once: true } });
-        gsap.fromTo(q('.member'), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: 'expo.out', stagger: 0.12, scrollTrigger: { trigger: q('.team__grid')[0], start: 'top 85%', once: true } });
-        // Portrait parallax inside its mask.
-        q('.member__photo').forEach((photo) => {
-          gsap.fromTo(photo.querySelector('.portrait__layer'), { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: photo, start: 'top bottom', end: 'bottom top', scrub: true } });
-        });
+  const root = useRef(null);
+  useGSAP(() => {
+    gsap.from('.team_intro', { y: 30, opacity: 0, duration: 1, scrollTrigger: { trigger: '.team_intro', start: 'top 90%' } });
+    const mm = gsap.matchMedia();
+    // Desktop: pin the section and translate the card track horizontally while scrolling
+    mm.add('(min-width: 900px)', () => {
+      const track = root.current.querySelector('.team_track');
+      const dist = () => track.scrollWidth - window.innerWidth;
+      const tween = gsap.to(track, {
+        x: () => -dist(),
+        ease: 'none',
+        scrollTrigger: { trigger: '.team_pin', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 },
       });
-      // Hover: portrait settles from 1.06 to 1.
-      mm.add(MQ.fine, () => {
-        const offs = q('.member').map((card) => {
-          const inner = card.querySelector('.portrait__zoom');
-          const enter = () => gsap.fromTo(inner, { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
-          card.addEventListener('pointerenter', enter);
-          return () => card.removeEventListener('pointerenter', enter);
-        });
-        return () => offs.forEach((o) => o());
+      // each card's photo counter-moves (parallax inside the mask)
+      gsap.utils.toArray('.member_photo .ph').forEach((ph) => {
+        gsap.fromTo(ph, { xPercent: -12 }, { xPercent: 12, ease: 'none', scrollTrigger: { trigger: ph.closest('.member'), containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
       });
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
+      gsap.to('.team_progress i', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.team_pin', start: 'top top', end: () => '+=' + dist(), scrub: true } });
+    });
+    mm.add('(max-width: 899px)', () => {
+      gsap.utils.toArray('.member').forEach((m) => gsap.from(m, { y: 60, opacity: 0, duration: 1, scrollTrigger: { trigger: m, start: 'top 85%' } }));
+    });
+  }, { scope: root });
 
   return (
-    <section ref={ref} id="team" className="section section--dark team" aria-labelledby="team-title">
-      <div className="container">
-        <header className="section__head section__head--split">
-          <div>
-            <SectionIndex index={team.index} label={team.label} />
-            <SplitHeading id="team-title" parts={team.parts} />
-          </div>
-          <p className="lead">{team.intro}</p>
-        </header>
-
-        {/* PLACEHOLDER — team members live in content/site.js */}
-        <div className="team__grid">
+    <section className="team section" ref={root}>
+      <div className="container team_head">
+        <SplitHeading parts={[[team.title[0], false]]} className="xl" />
+        <div className="feat_row">
+          <p className="team_intro">{team.intro}</p>
+          <SplitHeading parts={[[team.title[1], true]]} className="xl" marker={false} />
+        </div>
+      </div>
+      <div className="team_pin">
+        <div className="team_track">
           {team.members.map((m) => (
-            <article key={m.name} className="member" tabIndex={0} aria-label={`${m.name}, ${m.role}`}>
-              <ChamferCard className="member__photo" cut={30}>
-                <div className="portrait__layer">
-                  <div className="portrait__zoom">
-                    {m.media.image || m.media.video ? (
-                      <Media media={m.media} alt={m.name} ratio="4 / 5" sizes="(max-width: 768px) 100vw, 33vw" />
-                    ) : (
-                      <div className="portrait__initials" aria-hidden="true">
-                        <span>{m.initials}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="member__bio">
+            <article className="member" key={m.role}>
+              <div className="member_photo">
+                {m.photo ? <img className="ph" src={m.photo} alt={m.name.replace('\n', ' ')} /> : <div className="ph ph_placeholder"><span>{m.name.split('\n').map((x) => x[0]).join('')}</span></div>}
+              </div>
+              <div className="member_info">
+                <h3>{m.name}</h3>
+                <span className="member_role">{m.role}</span>
+                <ul>{m.points.map((p) => <li key={p}>{p}</li>)}</ul>
+                <div className="member_bio">
                   <p>{m.bio}</p>
+                  <a href={m.linkedin} className="member_in" aria-label="LinkedIn"><Social name="linkedin" size={20} /></a>
                 </div>
-                <a className="member__in" href={m.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${m.name} on LinkedIn`}>
-                  <SocialIcon id="linkedin" />
-                </a>
-              </ChamferCard>
-              <h3 className="member__name">{m.name}</h3>
-              <p className="member__role">{m.role}</p>
-              <ul className="member__points">
-                {m.points.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
+              </div>
             </article>
           ))}
         </div>
+        <div className="team_progress container"><i /></div>
       </div>
     </section>
   );

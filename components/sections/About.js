@@ -1,150 +1,107 @@
 'use client';
+import { useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { about, brand } from '@/content/site';
+import { useSite } from '../global/SiteProvider';
+import Media from '../ui/Media';
+import { LRMark } from '../ui/Icons';
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap, useGSAP, MQ, prefersReducedMotion } from '@/lib/gsap';
-import { sectionWipe, countUp } from '@/lib/anim';
-import SectionIndex from '@/components/ui/SectionIndex';
-import SplitHeading from '@/components/ui/SplitHeading';
-import ChamferCard from '@/components/ui/ChamferCard';
-import LogoMark from '@/components/ui/LogoMark';
-import Media from '@/components/ui/Media';
-import { about } from '@/content/site';
-
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const wordsHtml = (text) =>
-  text
-    .split(/\s+/)
-    .map((w) => `<span class="hl-w">${esc(w)}</span>`)
-    .join(' ');
-
-/** Mouse-following border glow for chamfered tiles (sets --mx / --my). */
-export function trackGlow(e) {
-  const tile = e.target.closest('[data-glow]');
-  if (!tile) return;
-  const r = tile.getBoundingClientRect();
-  tile.style.setProperty('--mx', `${e.clientX - r.left}px`);
-  tile.style.setProperty('--my', `${e.clientY - r.top}px`);
-}
+// page-relative top of an element, ignoring transforms
+const docTop = (el) => { let y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; };
+const docLeft = (el) => { let x = 0; while (el) { x += el.offsetLeft; el = el.offsetParent; } return x; };
 
 export default function About() {
-  const ref = useRef(null);
-  const textRef = useRef(null);
-  const top = useRef(null);
-  const bottom = useRef(null);
-  const [splitKey, setSplitKey] = useState(0);
+  const root = useRef(null);
+  const { ready } = useSite();
 
-  // Re-split lines when the paragraph width changes.
-  useEffect(() => {
-    let width = textRef.current.offsetWidth;
-    let t;
-    const ro = new ResizeObserver(() => {
-      const next = textRef.current?.offsetWidth;
-      if (next && next !== width) {
-        width = next;
-        clearTimeout(t);
-        t = setTimeout(() => setSplitKey((k) => k + 1), 200);
-      }
+  useGSAP(() => {
+    // Eyebrow letters drift apart as you scroll
+    gsap.fromTo('.about_eyebrow .accent', { x: -60 }, { x: 0, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 30%', scrub: true } });
+    // Body copy: each word brightens from dim to white as it passes (scrubbed "reading" effect)
+    gsap.fromTo('.about_body .rw', { opacity: 0.18 }, { opacity: 1, stagger: 0.02, ease: 'none', scrollTrigger: { trigger: '.about_body', start: 'top 80%', end: 'bottom 45%', scrub: true } });
+    gsap.from('.about_stamp', { opacity: 0, y: 60, rotate: -6, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.about_media_wrap', start: 'center 70%' } });
+
+    const mm = gsap.matchMedia();
+    // Phones: the media card expands from an inset rounded card to full-bleed on its own
+    mm.add('(max-width: 899px)', () => {
+      gsap.fromTo('.about_media', { clipPath: 'inset(6% 8% 6% 8% round 28px)', scale: 0.96 }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', scale: 1, ease: 'none', scrollTrigger: { trigger: '.about_media_wrap', start: 'top 85%', end: 'center 55%', scrub: true } });
+      gsap.fromTo('.about_media .media', { scale: 1.25 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.about_media_wrap', start: 'top bottom', end: 'bottom top', scrub: true } });
     });
-    ro.observe(textRef.current);
-    // Line breaks change once the web font arrives.
-    document.fonts?.ready.then(() => setSplitKey((k) => k + 1));
-    return () => {
-      clearTimeout(t);
-      ro.disconnect();
-    };
-  }, []);
+  }, { scope: root });
 
-  // Line-by-line highlight: a cyan bar fills behind each line, text goes from 30% to 100%.
-  useGSAP(
-    () => {
-      const p = textRef.current;
-      p.innerHTML = wordsHtml(about.text);
-      const words = [...p.querySelectorAll('.hl-w')];
-      const lines = [];
-      let lastTop = null;
-      for (const w of words) {
-        const top = w.offsetTop;
-        if (lastTop === null || Math.abs(top - lastTop) > 4) {
-          lines.push([]);
-          lastTop = top;
-        }
-        lines[lines.length - 1].push(w.textContent);
-      }
-      p.innerHTML = lines
-        .map((l) => `<span class="hl-line"><span class="hl-in"><span class="hl-bar"></span><span class="hl-text">${esc(l.join(' '))}</span></span></span>`)
-        .join('');
+  // Desktop: the hero's preview tile becomes this section's media while scrolling.
+  // 1) as soon as you scroll, the tile docks in the bottom-right corner (fixed, like a mini-player)
+  // 2) when the About media scrolls into view, the tile grows and glides into its exact place
+  // 3) the real media takes over; scrolling back up reverses everything
+  useGSAP(() => {
+    if (!ready) return;
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 900px)', () => {
+      const thumb = document.querySelector('.hero_thumb');
+      const media = root.current.querySelector('.about_media');
+      const fly = root.current.querySelector('.about_fly');
+      if (!thumb || !media || !fly) return;
 
-      if (prefersReducedMotion()) return;
-      const tl = gsap.timeline({ scrollTrigger: { trigger: p, start: 'top 78%', end: 'bottom 45%', scrub: 0.6 } });
-      p.querySelectorAll('.hl-line').forEach((line) => {
-        tl.fromTo(line.querySelector('.hl-bar'), { scaleX: 0 }, { scaleX: 1, ease: 'none', duration: 1 })
-          .fromTo(line.querySelector('.hl-text'), { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, '<');
+      const dock = () => ({ top: docTop(thumb), left: docLeft(thumb), width: thumb.offsetWidth, height: thumb.offsetHeight });
+      const growStart = () => docTop(media) - innerHeight;                          // media top meets screen bottom
+      const growEnd = () => docTop(media) - (innerHeight - media.offsetHeight) / 2;  // media centred on screen
+      const ease = gsap.parseEase('power2.inOut');
+      const lerp = (a, b, t) => a + (b - a) * t;
+
+      // place the copy between the dock and wherever the real media is on screen *right now*,
+      // so it grows into the media area instead of sweeping over the text above it
+      const place = (p) => {
+        const d = dock(), m = media.getBoundingClientRect(), t = ease(p);
+        gsap.set(fly, { top: lerp(d.top, m.top, t), left: lerp(d.left, m.left, t), width: lerp(d.width, m.width, t), height: lerp(d.height, m.height, t), borderRadius: lerp(12, 0, t) });
+      };
+
+      const show = (state) => {
+        // state: 'hero' (tile in hero) | 'fly' (travelling copy) | 'about' (real media)
+        gsap.set(thumb, { autoAlpha: state === 'hero' ? 1 : 0 });
+        gsap.set(fly, { autoAlpha: state === 'fly' ? 1 : 0 });
+        gsap.set(media, { autoAlpha: state === 'about' || state === 'hero' ? 1 : 0 });
+      };
+
+      place(0);
+      const grow = ScrollTrigger.create({
+        start: growStart, end: growEnd, invalidateOnRefresh: true,
+        onUpdate: (self) => place(self.progress),
+        onRefresh: (self) => place(self.progress),
+        onLeaveBack: () => place(0),
       });
-    },
-    { scope: ref, dependencies: [splitKey], revertOnUpdate: true }
-  );
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      const reduced = prefersReducedMotion();
-      sectionWipe(ref.current, reduced);
-
-      mm.add(MQ.motion, () => {
-        gsap.fromTo('.tile', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: '.bento', start: 'top 85%', once: true } });
-        gsap.fromTo('.tile--media .media__inner', { scale: 1.15 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.tile--media', start: 'top bottom', end: 'bottom 30%', scrub: true } });
-        gsap.fromTo(top.current, { x: 140, y: -140 }, { x: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.tile--mark', start: 'top 95%', end: 'center 50%', scrub: true } });
-        gsap.fromTo(bottom.current, { x: -140, y: 140 }, { x: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.tile--mark', start: 'top 95%', end: 'center 50%', scrub: true } });
+      const st = ScrollTrigger.create({
+        start: 2,
+        end: growEnd,
+        onToggle: (self) => self.isActive && show('fly'),
+        onLeave: () => show('about'),
+        onLeaveBack: () => show('hero'),
       });
+      show(window.scrollY > 2 ? (window.scrollY >= growEnd() ? 'about' : 'fly') : 'hero');
 
-      const num = ref.current.querySelector('[data-count]');
-      gsap.timeline({ scrollTrigger: { trigger: num, start: 'top 90%', once: true } }).add(countUp(num, about.stat.value, { suffix: about.stat.suffix, duration: reduced ? 0.01 : 2 }));
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
+      return () => { grow.kill(); st.kill(); gsap.set([thumb, media], { clearProps: 'visibility,opacity' }); };
+    });
+    ScrollTrigger.refresh();
+  }, { dependencies: [ready], scope: root });
 
   return (
-    <section ref={ref} id="about" className="section section--paper wipe about" aria-labelledby="about-title">
+    <section className="about section" id="about" ref={root}>
       <div className="container">
-        <header className="section__head">
-          <SectionIndex index={about.index} label={about.label} />
-          <SplitHeading id="about-title" parts={about.parts} />
-        </header>
-
-        <div className="about__grid">
-          <p ref={textRef} className="about__text hl" dangerouslySetInnerHTML={{ __html: esc(about.text) }} />
-
-          <div className="bento" onPointerMove={trackGlow}>
-            <ChamferCard className="tile tile--media" data-glow>
-              <Media media={about.media} ratio="16 / 9" label={about.mediaCaption} alt={about.mediaCaption} />
-            </ChamferCard>
-            {/* PLACEHOLDER — figure in content/site.js */}
-            <ChamferCard className="tile tile--stat" data-glow>
-              <p className="tile__eyebrow">{about.stat.label}</p>
-              <p className="tile__num">
-                <span data-count>
-                  {about.stat.value}
-                  {about.stat.suffix}
-                </span>
-                <small>{about.stat.unit}</small>
-              </p>
-            </ChamferCard>
-            <ChamferCard className="tile tile--team" data-glow>
-              <p className="tile__eyebrow">{about.team.title}</p>
-              <ul className="tile__list">
-                {about.team.items.map((i) => (
-                  <li key={i}>{i}</li>
-                ))}
-              </ul>
-            </ChamferCard>
-            <ChamferCard className="tile tile--mark" data-glow>
-              <LogoMark topRef={top} bottomRef={bottom} className="tile__mark" />
-              <p className="tile__caption">{about.markCaption}</p>
-            </ChamferCard>
-          </div>
+        <h2 className="about_eyebrow"><span>{about.eyebrow[0]}</span><span className="accent">{about.eyebrow[1]}</span></h2>
+        <h3 className="about_title">{about.title}</h3>
+        <p className="about_body">
+          {about.body.split(' ').map((w, i) => <span className="rw" key={i}>{w} </span>)}
+        </p>
+      </div>
+      <div className="about_media_wrap container">
+        <div className="about_media" data-cursor="view">
+          <Media media={about.media} hue={190} />
+          <div className="about_stamp"><LRMark size={46} /><span>{brand.name}</span></div>
         </div>
       </div>
+      {/* travelling copy of the media (desktop only) */}
+      <div className="about_fly" aria-hidden="true"><Media media={about.media} hue={190} /></div>
     </section>
   );
 }
