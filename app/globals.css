@@ -203,22 +203,51 @@ html.has_cursor, html.has_cursor * { cursor: none !important; }
 }
 
 /* ══════════════ 1. HERO ══════════════ */
-.hero { position: relative; height: 100svh; min-height: 620px; overflow: hidden; display: flex; align-items: flex-end; }
+/* Ported from the Long Relation banner export (banner-export/lr-banner.css) */
+@font-face { font-family: 'LR Montserrat'; font-weight: 300; font-display: swap; src: url(/fonts/montserrat-300.ttf) format('truetype'); }
+@font-face { font-family: 'LR Montserrat'; font-weight: 400; font-display: swap; src: url(/fonts/montserrat-400.ttf) format('truetype'); }
+@font-face { font-family: 'LR Montserrat'; font-weight: 700; font-display: swap; src: url(/fonts/montserrat-700.ttf) format('truetype'); }
+@font-face { font-family: 'LR Inter'; font-weight: 300; font-display: swap; src: url(/fonts/inter-300.ttf) format('truetype'); }
+
+.hero { position: relative; isolation: isolate; height: 100vh; height: 100svh; min-height: 620px; padding: 0 0 15%; overflow: hidden; display: flex; align-items: flex-end; background: var(--bg); font-family: 'LR Inter', var(--font); }
 .hero_bg { position: absolute; inset: 0; will-change: transform; }
-.hero_canvas { width: 100%; height: 100%; display: block; }
-.hero_pupil { position: absolute; left: 50%; top: 50%; translate: -50% -50%; filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.6)); }
-.hero_shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(var(--bg-rgb),0.95) 0%, rgba(var(--bg-rgb),0.1) 45%, rgba(var(--bg-rgb),0.3) 100%); }
-.hero_bigword { position: absolute; left: 0; right: 0; bottom: -2vw; display: flex; justify-content: center; pointer-events: none; }
-.hero_bigword img { width: min(88vw, 1500px); height: auto; opacity: 0.05; }
-.hero_content { position: relative; z-index: 2; padding-bottom: clamp(70px, 12vh, 120px); }
-.hero_title { font-size: clamp(36px, 5.2vw, 66px); font-weight: 300; line-height: 1.12; letter-spacing: -0.01em; }
+/* layer 1: iris video, shifted from orange to the brand cyan (170deg lands on --accent, hue 188), with a soft hole where the mark sits */
+.hero_vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: hue-rotate(170deg) saturate(0.9) brightness(0.85); -webkit-mask-image: radial-gradient(ellipse 17% 24% at 49% 47%, transparent 60%, #000 95%); mask-image: radial-gradient(ellipse 17% 24% at 49% 47%, transparent 60%, #000 95%); }
+/* layer 2: logo mark centred in the hole */
+.hero_mark { position: absolute; left: 49%; top: 47%; width: clamp(70px, 10vw, 210px); aspect-ratio: 1; translate: -50% -50%; rotate: -5deg; pointer-events: none; }
+.hero_mark_in { width: 100%; height: 100%; background: center / contain no-repeat; filter: drop-shadow(0 0 24px rgba(var(--accent-rgb), 0.45)); will-change: transform; }
+/* layer 3: vignette into the site background */
+.hero_vignette { position: absolute; inset: 0; background: radial-gradient(circle, rgba(var(--bg-rgb), 0) 0%, var(--bg) 100%); pointer-events: none; }
+/* layer 4: blurred top and bottom fades */
+.hero_shade { position: absolute; inset: 0; pointer-events: none; }
+.hero_shade::after { content: ''; position: absolute; top: -50px; left: 0; width: 100%; height: 160px; background: var(--bg); filter: blur(40px); }
+.hero_shade::before { content: ''; position: absolute; bottom: -30px; left: 0; width: 100%; height: 60px; background: var(--bg); filter: blur(10px); }
+/* giant ghost wordmark */
+.hero_bigword { position: absolute; bottom: 0; left: 0; right: 0; max-width: 1920px; margin: 0 auto; padding: 0 3%; font-family: 'LR Montserrat', Montserrat, sans-serif; font-size: clamp(62px, 12vw, 260px); font-weight: 700; line-height: 250px; letter-spacing: -0.04em; white-space: nowrap; text-align: center; text-transform: uppercase; background: linear-gradient(#3e3d3da3, rgba(var(--bg-rgb), 0) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; mix-blend-mode: lighten; pointer-events: none; }
+/* foreground copy */
+.hero_content { position: relative; z-index: 2; width: 100%; padding: 0 3%; }
+.hero_tag { margin: 0 0 100px auto; font-size: 22px; font-weight: 200; line-height: 1.6; text-align: right; white-space: pre-line; }
+.hero_title { font-family: 'LR Montserrat', Montserrat, sans-serif; font-size: 50px; font-weight: 400; line-height: 1.2; }
 .hero_line { display: block; }
-.hero_title .accent { font-weight: 300; }
+.hero_title .accent { color: var(--accent); }
 .hero_title .bold { font-weight: 700; }
 .hero_title .wm { padding-bottom: 0.08em; }
-.hero_tag { position: absolute; right: var(--gutter); top: -42vh; max-width: 340px; text-align: right; font-size: 18px; line-height: 1.6; color: var(--muted); white-space: pre-line; }
-.hero_since { position: absolute; right: var(--gutter); bottom: calc(clamp(70px, 12vh, 120px) + 90px); writing-mode: vertical-rl; rotate: 180deg; font-size: 13px; color: var(--muted); }
-.hero_since::before { content: ''; display: inline-block; width: 1px; height: 80px; margin-bottom: 14px; background: var(--muted); }
+.hero_since { position: absolute; bottom: 0; right: 3%; height: 60%; padding-right: 5px; border-right: 1px solid #ffffff42; writing-mode: sideways-lr; font-size: 14px; font-weight: 200; line-height: 1; }
+@supports not (writing-mode: sideways-lr) { .hero_since { writing-mode: vertical-rl; rotate: 180deg; border-right: 0; border-left: 1px solid #ffffff42; padding: 0 0 0 5px; } }
+@media (min-width: 1400px) and (max-width: 1599px) { .hero { padding-bottom: 17%; } }
+@media (min-width: 1200px) and (max-width: 1399px) { .hero_since { bottom: 10px; } .hero_bigword { line-height: 0.9; } }
+@media (min-width: 992px) and (max-width: 1199px) { .hero { padding-bottom: 16.5%; } .hero_bigword { line-height: 1; } }
+@media (min-width: 768px) and (max-width: 991px) { .hero { padding-bottom: 19%; } .hero_bigword { line-height: 1.2; } .hero_title { font-size: 40px; } }
+@media (max-width: 767px) {
+  .hero { min-height: 700px; padding: 70px 0 130px; } /* extra bottom room keeps the headline clear of the preview tile */
+  .hero_vid { -webkit-mask-image: radial-gradient(ellipse 40% 20% at 49% 47%, transparent 60%, #000 95%); mask-image: radial-gradient(ellipse 40% 20% at 49% 47%, transparent 60%, #000 95%); }
+  .hero_mark { width: 95px; }
+  .hero_content { display: flex; flex-direction: column; justify-content: space-between; height: calc(72svh - 60px); padding: 0 1.2rem; }
+  .hero_bigword { font-size: 11.8vw; line-height: 1.1; bottom: 16px; }
+  .hero_tag { max-width: 260px; margin-bottom: 0; font-size: 18px; }
+  .hero_title { font-size: 25px; }
+  .hero_since { top: 28%; bottom: 22%; height: auto; right: 1.2rem; } /* between tagline and headline, clear of both */
+}
 .hero_thumb { position: absolute; right: var(--gutter); bottom: 24px; z-index: 3; width: 210px; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); transition: transform 0.5s var(--ease); }
 .hero_thumb:hover { transform: scale(1.05); }
 
@@ -506,8 +535,7 @@ html.has_cursor, html.has_cursor * { cursor: none !important; }
 
   .ai_chips { display: none; }
   .ai_card::before { background: linear-gradient(180deg, rgba(6, 122, 143, 0.95), rgba(6, 122, 143, 0.8)); }
-  .hero_tag { position: static; text-align: left; margin-top: 20px; font-size: 15px; }
-  .hero_since, .circuit { display: none; }
+  .circuit { display: none; }
   .quote_btn { display: none; }
 }
 @media (max-width: 640px) {

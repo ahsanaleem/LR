@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ffmpeg -loglevel error -y -i C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/8939822.mp4 -vf scale=1280:720,format=yuv420p -an -c:v libx264 -crf 23 -preset slow -movflags +faststart '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.mp4')",
+      "Bash(ffmpeg -loglevel error -y -ss 3 -i '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.mp4' -frames:v 1 -q:v 4 '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.jpg')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/media/about/saudi-team.mp4)",
+      "Bash(ffprobe -v error -show_entries format=duration -of csv=p=0 7975466.mp4)",
+      "Bash(ffmpeg -loglevel error -y -i 7975466.mp4 -vf \"fps=1/3,scale=480:270,tile=2x2\" -frames:v 1 t7975.jpg)",
+      "Bash(ffmpeg -loglevel error -y -i C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/7975466.mp4 -vf scale=1280:720,format=yuv420p -an -c:v libx264 -crf 23 -preset slow -movflags +faststart '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.mp4')",
+      "Bash(ffmpeg -loglevel error -y -ss 2 -i '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.mp4' -frames:v 1 -q:v 4 '/c/Users/User/Downloads/Office Projects/LR/public/media/about/saudi-team.jpg')",
+      "Bash(mkdir -p '/c/Users/User/Downloads/Office Projects/LR/public/media/ai')",
+      "Bash(ffprobe -v error -show_entries format=duration -of csv=p=0 C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/8939991.mp4)",
+      "Bash(ffmpeg -loglevel error -y -i C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/8939991.mp4 -vf scale=1280:720,format=yuv420p -an -c:v libx264 -crf 23 -preset slow -movflags +faststart '/c/Users/User/Downloads/Office Projects/LR/public/media/ai/saudi-planning.mp4')",
+      "Bash(ffmpeg -loglevel error -y -ss 4 -i '/c/Users/User/Downloads/Office Projects/LR/public/media/ai/saudi-planning.mp4' -frames:v 1 -q:v 4 '/c/Users/User/Downloads/Office Projects/LR/public/media/ai/saudi-planning.jpg')",
+      "Bash(curl -s -o /dev/null -m 10 -w \"%{http_code}\\\\n\" http://localhost:3001/media/ai/saudi-planning.jpg)",
+      "Bash(ffmpeg -loglevel error -y -i '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/banner-vid.mp4' -vf fps=1/2,scale=480:270,tile=2x2 -frames:v 1 C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/banner.jpg)",
+      "Bash(ffmpeg -loglevel error -y -i '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/banner-poster.webp' C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/bposter.png)",
+      "Bash(cp '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/banner-vid.mp4' '/c/Users/User/Downloads/Office Projects/LR/public/media/hero/banner-vid.mp4')",
+      "Bash(cp '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/banner-poster.webp' '/c/Users/User/Downloads/Office Projects/LR/public/media/hero/banner-poster.webp')",
+      "Bash(cp '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/mark.svg' '/c/Users/User/Downloads/Office Projects/LR/public/media/hero/mark.svg')",
+      "Bash(cp '/c/Users/User/Downloads/Office Projects/Long_Relation_Source/banner-export/assets/fonts/*.ttf' '/c/Users/User/Downloads/Office Projects/LR/public/fonts/')",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "ClaudeInChromeDomain(localhost:3001)",
+      "Bash(curl -s -o /dev/null -w \"video %{http_code} %{size_download}B\\\\n\" http://localhost:3001/media/hero/banner-vid.mp4)",
+      "Bash(curl -s -o /dev/null -w \"font %{http_code}\\\\n\" http://localhost:3001/fonts/montserrat-700.ttf)",
+      "Bash(curl -s -o /dev/null -w \"mark %{http_code}\\\\n\" http://localhost:3001/media/hero/mark.svg)",
+      "Bash(node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/hue.js\" 116 30 2)",
+      "Bash(node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/hue.js\" 230 90 40)"
+    ]
+  }
+}

@@ -33,12 +33,16 @@ export const nav = [
 
 export const hero = {
   lines: [
-    [{ t: 'Engineered by ' }, { t: 'AI.', accent: true }],
-    [{ t: 'Shaped by ' }, { t: 'Human Craft.', bold: true }],
+    [{ t: 'Empowered by ' }, { t: 'AI.', accent: true }],
+    [{ t: 'Driven by ' }, { t: 'Human Vision.', bold: true }],
   ],
-  tagline: 'Product strategy, design and engineering\nfor software that grows with you.',
-  media: {}, // e.g. { video: '/media/hero.mp4' }
-  thumb: { video: '/media/about/team-planning.mp4', poster: '/media/about/team-planning.jpg' }, // small looping preview, bottom-right — same clip as About, so the tile flows into it
+  tagline: 'Intelligence-first design,\nstrategy, and engineering\nfor products that scale.',
+  since: '2021-2026',
+  wordmark: 'long relation', // giant ghost word along the bottom
+  // background iris loop — recoloured teal in CSS; the logo mark sits in a soft hole cut at the pupil
+  media: { video: '/media/hero/banner-vid.mp4', poster: '/media/hero/banner-poster.webp' },
+  mark: '/brand/mark.svg', // brand-cyan vector mark
+  thumb: { video: '/media/about/saudi-team.mp4', poster: '/media/about/saudi-team.jpg' }, // small looping preview, bottom-right — same clip as About, so the tile flows into it
 };
 
 export const about = {
@@ -46,7 +50,7 @@ export const about = {
   title: 'we build the intelligence behind the interface',
   body:
     'Long Relation is a product studio that designs and engineers software across web, mobile, 3D, XR and AI automation. We start with how your business makes money — not with screens. We trace the revenue path, find where people drop off, and plan an architecture that holds up under real traffic. The result is software that pulls its weight in the market, not a concept that lives in a pitch deck.',
-  media: { video: '/media/about/team-planning.mp4', poster: '/media/about/team-planning.jpg' },
+  media: { video: '/media/about/saudi-team.mp4', poster: '/media/about/saudi-team.jpg' },
 };
 
 export const services = {
@@ -204,7 +208,7 @@ export const growAI = {
   cardText:
     'Strategy, engineering and data under one roof, so your organisation can run AI in production. Custom LLM, automated decisioning or an in-product agent — we turn it into measurable, revenue-linked capability.',
   cta: 'Book a Consultation',
-  media: {},
+  media: { video: '/media/ai/saudi-planning.mp4', poster: '/media/ai/saudi-planning.jpg' },
 };
 
 export const why = {
