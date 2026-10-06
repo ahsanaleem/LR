@@ -10,7 +10,6 @@
 export const brand = {
   name: 'LONG RELATION',
   short: 'Long Relation',
-  since: '2026',
   phone: '+1 (000) 000-0000', // PLACEHOLDER
   email: 'hello@longrelation.com', // PLACEHOLDER
   supportEmail: 'support@longrelation.com', // PLACEHOLDER
@@ -39,7 +38,7 @@ export const hero = {
   tagline: 'Intelligence-first design,\nstrategy, and engineering\nfor products that scale.',
   since: '2021-2026',
   wordmark: 'long relation', // giant ghost word along the bottom
-  // background iris loop — recoloured teal in CSS; the logo mark sits in a soft hole cut at the pupil
+  // background iris loop — recoloured to the brand cyan in CSS; the logo mark sits in a soft hole cut at the pupil
   media: { video: '/media/hero/banner-vid.mp4', poster: '/media/hero/banner-poster.webp' },
   mark: '/brand/mark.svg', // brand-cyan vector mark
   thumb: { video: '/media/about/saudi-team.mp4', poster: '/media/about/saudi-team.jpg' }, // small looping preview, bottom-right — same clip as About, so the tile flows into it

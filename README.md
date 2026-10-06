@@ -28,7 +28,7 @@ media: { image: '/media/project-1.jpg' }
 ```
 
 When `media` is empty, an animated placeholder (gradient blobs, grid and hexagon) is shown, so the layout always looks finished.
-The hero shows a procedural canvas "iris" until you set `hero.media.video`.
+The hero plays `hero.media.video` (an orange iris loop, recoloured to the brand cyan in CSS) with `hero.mark` set into a soft hole cut at the pupil.
 
 Team photos: set `photo: '/media/team/name.jpg'` (portrait, at least 600×760).
 
@@ -55,7 +55,6 @@ components/
     SplitHeading.js    big uppercase headings, word-by-word mask reveal
     Reveal.js          generic staggered fade-up
     Media.js           video / image / animated placeholder
-    HeroCanvas.js      procedural iris background
     ContactForm.js     floating labels, validation, toast (wire to your API)
     Icons.js           inline SVG icons + hexagon logo
 content/site.js        ← edit me

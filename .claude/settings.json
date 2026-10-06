@@ -25,7 +25,20 @@
       "Bash(curl -s -o /dev/null -w \"font %{http_code}\\\\n\" http://localhost:3001/fonts/montserrat-700.ttf)",
       "Bash(curl -s -o /dev/null -w \"mark %{http_code}\\\\n\" http://localhost:3001/media/hero/mark.svg)",
       "Bash(node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/hue.js\" 116 30 2)",
-      "Bash(node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/hue.js\" 230 90 40)"
+      "Bash(node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Downloads-Office-Projects-LR/3ff2a090-3afb-4f7a-8e9c-88bfeb84be66/scratchpad/hue.js\" 230 90 40)",
+      "WebFetch(domain:mixkit.co)",
+      "Bash(ffprobe -v error -show_entries format=duration -of csv=p=0 7975464.mp4)",
+      "Bash(ffmpeg -loglevel error -y -i 7975464.mp4 -vf \"fps=1/4,scale=480:270,tile=2x2\" -frames:v 1 t.jpg)",
+      "Bash(ffprobe -v error -show_entries format=duration -of csv=p=0 8939904.mp4)",
+      "Bash(ffmpeg -loglevel error -y -i 8939904.mp4 -vf \"fps=1/4,scale=480:270,tile=2x2\" -frames:v 1 t2.jpg)",
+      "WebFetch(domain:pixabay.com)",
+      "WebFetch(domain:www.videvo.net)",
+      "WebFetch(domain:coverr.co)",
+      "Bash(grep -iE \"\\\\.\\(mp4|mov|webm|mkv|m4v|avi\\)$\")",
+      "Bash(ffmpeg -loglevel error -y -i banner-vid.mp4 -c:v copy -an -movflags +faststart banner-vid.tmp.mp4)",
+      "Bash(mv banner-vid.tmp.mp4 banner-vid.mp4)",
+      "Bash(ffprobe -v error -show_entries stream=codec_type -of csv=p=0 banner-vid.mp4)",
+      "Bash(cd \"/c/Users/User/Downloads/Office Projects/LR\"; rm -v public/media/about/team-planning.mp4 public/media/about/team-planning.jpg public/brand/logo-dark.png public/brand/wordmark-dark.png public/brand/logo-source-dark.svg public/brand/logo-source-white.svg public/fonts/montserrat-300.ttf components/ui/HeroCanvas.js; grep -n \"since\\\\|HeroCanvas\\\\|hero canvas\\\\|iris\\\\|logo-source\\\\|logo-dark\\\\|wordmark-dark\\\\|team-planning\" content/site.js README.md | head -20)"
     ]
   }
 }

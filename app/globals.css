@@ -71,7 +71,6 @@ html.has_cursor, html.has_cursor * { cursor: none !important; }
 .split_heading.tight { line-height: 0.95; }
 .split_heading .part { display: inline; }
 .split_heading .part.block { display: block; }
-.split_heading.nogap .part + .part .wm:first-child { margin-left: -0.25em; }
 .split_heading .wm { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.06em; margin-right: 0.25em; }
 .split_heading .w { display: inline-block; will-change: transform; }
 .split_heading.has_marker::before {
@@ -204,7 +203,6 @@ html.has_cursor, html.has_cursor * { cursor: none !important; }
 
 /* ══════════════ 1. HERO ══════════════ */
 /* Ported from the Long Relation banner export (banner-export/lr-banner.css) */
-@font-face { font-family: 'LR Montserrat'; font-weight: 300; font-display: swap; src: url(/fonts/montserrat-300.ttf) format('truetype'); }
 @font-face { font-family: 'LR Montserrat'; font-weight: 400; font-display: swap; src: url(/fonts/montserrat-400.ttf) format('truetype'); }
 @font-face { font-family: 'LR Montserrat'; font-weight: 700; font-display: swap; src: url(/fonts/montserrat-700.ttf) format('truetype'); }
 @font-face { font-family: 'LR Inter'; font-weight: 300; font-display: swap; src: url(/fonts/inter-300.ttf) format('truetype'); }
