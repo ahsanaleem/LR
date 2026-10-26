@@ -1,0 +1,35 @@
+# Long Relation
+
+> AI-first product studio that designs and engineers mobile apps, games, web platforms and AI automation for companies in Saudi Arabia and the wider Gulf — from strategy and design to launch, growth and long-term care.
+
+## Services
+- Mobile Apps: native iOS and Android, React Native and Flutter apps built for speed, retention and store visibility.
+- Game Development: Unity and Unreal games and interactive worlds for PC, console, mobile and AR/VR headsets.
+- AI Engineering: custom models, fine-tuned LLMs, decision engines and agent workflows tied to real business outcomes.
+- Growth & Care: performance marketing, app store optimisation, support and upgrades after launch.
+- Products & Platforms: commerce platforms and immersive-technology foundations.
+
+## Engagement models
+- Project-based delivery: fixed scope, budget and launch date with a dedicated project lead.
+- Dedicated team: a complete strategy, design and engineering squad for larger programmes.
+- Staff augmentation: vetted senior engineers, designers and product people inside your team.
+
+## Case studies
+- Manani: social dream journal (iOS/Android) with video, voice and text capture and AI dream interpretation.
+- Menna: bilingual Arabic/English luxury fashion marketplace app featuring Saudi designers, with full RTL support.
+- Menna Web: the Menna storefront on the web with Tabby instalment checkout and express delivery across Riyadh, Jeddah and Dammam.
+
+## Key pages
+- Services: https://lr.com.sa/services
+- Mobile app development: https://lr.com.sa/services/mobile-app-development
+- Game development: https://lr.com.sa/services/game-development
+- AI engineering & automation: https://lr.com.sa/services/ai-engineering
+- Commerce & platforms: https://lr.com.sa/services/products-and-platforms
+- Growth & care: https://lr.com.sa/services/growth-and-care
+- Case studies: https://lr.com.sa/work
+- Blog: https://lr.com.sa/blog
+- Arabic version of every page: prefix the path with /ar (e.g. https://lr.com.sa/ar/services)
+
+## Contact
+- Website: https://lr.com.sa/
+- Email: hello@longrelation.com

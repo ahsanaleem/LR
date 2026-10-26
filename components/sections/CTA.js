@@ -2,11 +2,11 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { cta } from '@/content/site';
-import { useSite } from '../global/SiteProvider';
+import { useSite, useContent } from '../global/SiteProvider';
 import { Arrow } from '../ui/Icons';
 
 export default function CTA() {
+  const { cta, ui } = useContent();
   const root = useRef(null);
   const { setModalOpen } = useSite();
   useGSAP(() => {

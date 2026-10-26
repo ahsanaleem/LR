@@ -6,12 +6,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Controller, EffectFade, Keyboard, A11y } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
-import { reviews } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
 import Media from '../ui/Media';
 import { ArrowLeft, Arrow, Play } from '../ui/Icons';
+import { useContent } from '../global/SiteProvider';
 
 export default function Reviews() {
+  const { reviews, ui } = useContent();
   const root = useRef(null);
   const [textSw, setTextSw] = useState(null);
   const [mediaSw, setMediaSw] = useState(null);
@@ -39,8 +40,8 @@ export default function Reviews() {
               ))}
             </Swiper>
             <div className="client_slider_btnss">
-              <button aria-label="Previous review" onClick={() => textSw?.slidePrev()}><ArrowLeft size={18} /></button>
-              <button aria-label="Next review" onClick={() => textSw?.slideNext()}><Arrow size={18} /></button>
+              <button aria-label={ui.prevReview} onClick={() => textSw?.slidePrev()}><ArrowLeft size={18} /></button>
+              <button aria-label={ui.nextReview} onClick={() => textSw?.slideNext()}><Arrow size={18} /></button>
             </div>
           </div>
           <div className="rev_right" data-cursor="drag">

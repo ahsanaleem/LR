@@ -2,11 +2,11 @@
 import { Fragment, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { hero } from '@/content/site';
-import { useSite } from '../global/SiteProvider';
+import { useSite, useContent } from '../global/SiteProvider';
 import Media from '../ui/Media';
 
 export default function Hero() {
+  const { hero, ui } = useContent();
   const root = useRef(null);
   const video = useRef(null);
   const { ready, scrollTo } = useSite();
@@ -100,10 +100,12 @@ export default function Hero() {
               ))}
             </span>
           ))}
+          {/* slogan stays the visual headline; this gives search engines and screen readers what we actually do */}
+          <span className="sr_only"> {hero.srLead}</span>
         </h1>
         <span className="hero_since">© {hero.since}</span>
       </div>
-      <button className="hero_thumb" data-cursor="view" onClick={() => scrollTo('#about')} aria-label="Scroll to about">
+      <button className="hero_thumb" data-cursor="view" onClick={() => scrollTo('#about')} aria-label={ui.scrollToAbout}>
         <Media media={hero.thumb} variant="thumb" hue={192} />
       </button>
     </section>

@@ -2,23 +2,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { featured } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
 import { Arrow } from '../ui/Icons';
+import SiteLink from '../ui/SiteLink';
+import { useContent } from '../global/SiteProvider';
 
 // Phone / browser chrome around a real product screenshot.
-function Screen({ kind, src, label }) {
+// width/height are the screenshots' intrinsic sizes so the browser reserves space before they load.
+function Screen({ kind, src, label, alt }) {
   if (kind === 'web')
     return (
       <figure className="dev_web">
         <div className="dev_bar"><i /><i /><i /><span>{label}</span></div>
-        <img src={src} alt={label} loading="lazy" />
+        <img src={src} alt={alt || label} width={1488} height={730} loading="lazy" decoding="async" />
       </figure>
     );
   return (
     <figure className="dev_phone">
       <span className="dev_notch" />
-      <img src={src} alt={label} loading="lazy" />
+      <img src={src} alt={alt || label} width={400} height={868} loading="lazy" decoding="async" />
     </figure>
   );
 }
@@ -41,11 +43,12 @@ function CaseStudy({ project, onClose }) {
     <div className="modal case_modal" ref={root} role="dialog" aria-modal="true" aria-label={`${project.name} case study`}>
       <div className="modal_bg" onClick={onClose} />
       <div className="modal_card case_card" data-lenis-prevent style={{ '--from': project.from, '--to': project.to }}>
-        <button className="modal_close" aria-label="Close" onClick={onClose}>×</button>
+        <button className="modal_close" aria-label={ui.close} onClick={onClose}>×</button>
         <small className="case_meta">{project.category} · {project.year}</small>
         <h3>{project.name}</h3>
         <div className="feat_tags">{project.tags.map((t) => <span key={t}>{t}</span>)}</div>
         <div className="case_text">{project.description.map((d) => <p key={d}>{d}</p>)}</div>
+        <SiteLink className="more_link" href={`/work/${project.slug}`}>{ui.readFullCase(project.name)} <Arrow size={16} /></SiteLink>
         <div className={`case_gallery is_${project.kind}`}>
           {project.screens.map((s) => <Screen key={s.src} kind={project.kind} {...s} />)}
         </div>
@@ -55,6 +58,7 @@ function CaseStudy({ project, onClose }) {
 }
 
 export default function Featured() {
+  const { featured, ui } = useContent();
   const root = useRef(null);
   const [open, setOpen] = useState(null);
   const close = useCallback(() => setOpen(null), []);
@@ -83,10 +87,11 @@ export default function Featured() {
     <section className="featured section" id="work" ref={root}>
       <div className="container">
         <div className="feat_head">
-          <SplitHeading parts={[[featured.title[0], false]]} className="xl" marker={false} />
+          {/* the title is split across two rows visually but is one H2: the second row is decorative */}
+          <SplitHeading parts={[[featured.title[0], false]]} className="xl" marker={false} srTail={featured.title[1]} />
           <div className="feat_row">
             <p className="feat_intro">{featured.intro}</p>
-            <SplitHeading parts={[[featured.title[1], true]]} className="xl" />
+            <SplitHeading parts={[[featured.title[1], true]]} className="xl" as="div" aria-hidden />
           </div>
         </div>
         <div className="feat_stack">
@@ -99,7 +104,10 @@ export default function Featured() {
                   <p className="feat_tagline">{p.tagline}</p>
                   <p className="feat_summary">{p.summary}</p>
                   <div className="feat_tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</div>
-                  <button className="case_btn" onClick={(e) => { e.stopPropagation(); setOpen(p); }}>View Case Study <Arrow size={18} /></button>
+                  <div className="case_actions">
+                    <button className="case_btn" onClick={(e) => { e.stopPropagation(); setOpen(p); }}>{ui.quickView} <Arrow size={18} /></button>
+                    <SiteLink className="more_link" href={`/work/${p.slug}`} onClick={(e) => e.stopPropagation()}>{ui.fullCase} <Arrow size={16} /></SiteLink>
+                  </div>
                 </div>
                 <div className={`feat_screens is_${p.kind}`}>
                   {p.screens.map((s) => <Screen key={s.src} kind={p.kind} {...s} />)}

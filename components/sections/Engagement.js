@@ -2,9 +2,9 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { engagement } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
 import { MARK_POLYS } from '../ui/Icons';
+import { useContent } from '../global/SiteProvider';
 
 function Network({ center }) {
   // hub-and-spoke "people" diagram
@@ -32,6 +32,7 @@ function Network({ center }) {
 }
 
 export default function Engagement() {
+  const { engagement, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
     gsap.from('.eng_intro', { y: 30, opacity: 0, duration: 1, scrollTrigger: { trigger: '.eng_intro', start: 'top 90%' } });

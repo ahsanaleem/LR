@@ -2,11 +2,13 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { brand, contact } from '@/content/site';
 import ContactForm from '../ui/ContactForm';
 import { Phone } from '../ui/Icons';
+import { telHref } from '@/lib/format';
+import { useContent } from '../global/SiteProvider';
 
 export default function Contact() {
+  const { brand, contact, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
     const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: 'top 70%' }, defaults: { ease: 'power3.out' } });
@@ -25,10 +27,12 @@ export default function Contact() {
             <h2>{contact.title}</h2>
             <p>{contact.text}</p>
             <p>{contact.sub}</p>
-            <a className="call_box" href={`tel:${brand.phone}`}>
-              <span className="call_icon"><Phone size={28} /></span>
-              <span><small>{contact.callLabel}</small><b>{brand.phone}</b></span>
-            </a>
+            {brand.phone && (
+              <a className="call_box" href={`tel:${telHref(brand.phone)}`}>
+                <span className="call_icon"><Phone size={28} /></span>
+                <span><small>{contact.callLabel}</small><b>{brand.phone}</b></span>
+              </a>
+            )}
           </div>
           <div className="contact_right">
             <h3>{contact.formTitle}</h3>

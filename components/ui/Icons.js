@@ -16,10 +16,10 @@ export function LRMark({ size = 32, color = 'var(--accent)', className = '' }) {
 
 // Full lockup (mark + wordmark). The wordmark uses the brand typeface, so it ships as
 // pre-rendered PNGs. tone="white" for dark backgrounds, "dark" for light ones.
-export function Logo({ height = 40, tone = 'white', wordOnly = false, className = '', alt = 'Long Relation' }) {
+export function Logo({ height = 40, tone = 'white', wordOnly = false, className = '', alt = 'Long Relation', loading }) {
   const src = `/brand/${wordOnly ? 'wordmark' : 'logo'}-${tone}.png`;
   const ratio = wordOnly ? 1051 / 372 : 1663 / 445;
-  return <img src={src} alt={alt} width={Math.round(height * ratio)} height={height} className={`brand_logo ${className}`} draggable="false" />;
+  return <img src={src} alt={alt} width={Math.round(height * ratio)} height={height} loading={loading} className={`brand_logo ${className}`} draggable="false" />;
 }
 
 export const Check = (p) => (

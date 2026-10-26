@@ -1,0 +1,269 @@
+{
+  "summary": {
+    "health_score": 37,
+    "business_type": "B2B software / product studio (agency), Saudi market; site not yet deployed",
+    "top_findings": [
+      "Placeholder awards, team, reviews, phone, address and stats are live in the build",
+      "Single-URL site: no service, case-study, blog, privacy or terms pages",
+      "No robots.txt, sitemap.xml, canonical, Open Graph or Twitter tags",
+      "All 9 autoplay videos download on load (~22 MB desktop, 26.4 MB page)",
+      "Mobile layout viewport is 501px on a 390px device; header menu button is off-screen"
+    ],
+    "quick_wins": [
+      "Add app/robots.js and app/sitemap.js",
+      "Add metadataBase, canonical, openGraph and twitter to layout metadata",
+      "Add Organization/WebSite/ProfessionalService JSON-LD",
+      "html { overflow-x: clip } to fix mobile overflow",
+      "preload=none + IntersectionObserver for non-hero videos"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 45,
+      "what_works": [
+        "Static prerender with full SSR HTML",
+        "lang, viewport, theme-color, SVG icon",
+        "Correct 404 handling"
+      ],
+      "findings": [
+        {
+          "title": "No robots.txt or sitemap.xml",
+          "severity": "Critical",
+          "description": "Both return 404.",
+          "recommendation": "Add app/robots.js and app/sitemap.js."
+        },
+        {
+          "title": "No canonical tag",
+          "severity": "High",
+          "description": "No rel=canonical; Vercel preview hosts could be indexed.",
+          "recommendation": "Set metadataBase and alternates.canonical."
+        },
+        {
+          "title": "Mobile horizontal overflow",
+          "severity": "High",
+          "description": "innerWidth 501 at a 390px device; Services.js:21 x:+-120 start offsets; menu button off-screen.",
+          "recommendation": "html { overflow-x: clip }."
+        },
+        {
+          "title": "No crawlable internal pages",
+          "severity": "High",
+          "description": "All 50 anchors are #, tel: or mailto:.",
+          "recommendation": "Create service, work, privacy and terms routes."
+        },
+        {
+          "title": "Missing security headers",
+          "severity": "Medium",
+          "description": "No CSP/XFO/Referrer-Policy; X-Powered-By exposed.",
+          "recommendation": "Configure headers() and poweredByHeader:false."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 35,
+      "what_works": [
+        "Original, specific copy",
+        "Three detailed real case studies"
+      ],
+      "findings": [
+        {
+          "title": "Placeholder content in production",
+          "severity": "Critical",
+          "description": "Fake phone/address, 5 placeholder awards, 3 placeholder team members, 4 placeholder reviews, unverified stats.",
+          "recommendation": "Replace with real data or hide the sections."
+        },
+        {
+          "title": "Weak E-E-A-T signals",
+          "severity": "High",
+          "description": "No named people, location, verifiable clients, or social profiles.",
+          "recommendation": "Add leadership, HQ, app store links, real testimonials."
+        },
+        {
+          "title": "Thin per-service content",
+          "severity": "High",
+          "description": "~20 words per service on one page.",
+          "recommendation": "Dedicated 800+ word service pages."
+        },
+        {
+          "title": "No Arabic version",
+          "severity": "Medium",
+          "description": "English only for a Saudi audience.",
+          "recommendation": "Add /ar with hreflang."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 45,
+      "what_works": [
+        "Single H1",
+        "Unique title and meta description present"
+      ],
+      "findings": [
+        {
+          "title": "Brand-only title, short description",
+          "severity": "High",
+          "description": "Title has no service/geo term; description is 83 chars.",
+          "recommendation": "Rewrite with service + Saudi Arabia; 140-160 char description."
+        },
+        {
+          "title": "Split H2 fragments",
+          "severity": "Medium",
+          "description": "FEATURED/PROJECTS and THE MINDS BEHIND/LONG RELATION are separate H2s.",
+          "recommendation": "Render one heading per title."
+        },
+        {
+          "title": "Dead # links",
+          "severity": "Medium",
+          "description": "Blog, Terms, Privacy, socials and LinkedIn links point to #.",
+          "recommendation": "Link real pages/profiles or remove."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 10,
+      "what_works": [],
+      "findings": [
+        {
+          "title": "No structured data",
+          "severity": "High",
+          "description": "0 JSON-LD blocks.",
+          "recommendation": "Add Organization, WebSite, ProfessionalService (draft in findings/schema.md)."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 40,
+      "what_works": [
+        "CLS near 0",
+        "Desktop FCP/LCP under 1s on localhost"
+      ],
+      "findings": [
+        {
+          "title": "All videos download eagerly",
+          "severity": "High",
+          "description": "21.9 MB of video fetched within 10s on desktop without scrolling.",
+          "recommendation": "preload=none, IntersectionObserver play, smaller encodes."
+        },
+        {
+          "title": "Heavy main thread on mobile",
+          "severity": "Medium",
+          "description": "4.65s long-task time under 4x CPU throttle; mobile FCP/LCP 3.8s.",
+          "recommendation": "Defer non-critical animation setup; reduce JS."
+        },
+        {
+          "title": "Intro loader on every visit",
+          "severity": "Medium",
+          "description": "~2.5s splash before content is visible.",
+          "recommendation": "Shorten; skip on repeat visits."
+        },
+        {
+          "title": "Unoptimised fonts and preloads",
+          "severity": "Medium",
+          "description": "395 KB fonts incl. TTF; below-fold SVGs preloaded.",
+          "recommendation": "next/font or subset WOFF2; drop the preloads."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 30,
+      "what_works": [
+        "Content server-rendered and readable without JS"
+      ],
+      "findings": [
+        {
+          "title": "No AI crawler policy or llms.txt",
+          "severity": "Medium",
+          "description": "robots.txt and llms.txt both 404.",
+          "recommendation": "Publish robots.txt with an explicit policy; add llms.txt."
+        },
+        {
+          "title": "Low citability",
+          "severity": "Medium",
+          "description": "Few verifiable, self-contained facts; no FAQ.",
+          "recommendation": "Add an at-a-glance facts passage and an FAQ."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 50,
+      "what_works": [
+        "Lazy loading on portfolio images",
+        "Alt text present on content images"
+      ],
+      "findings": [
+        {
+          "title": "Large PNG screenshots",
+          "severity": "Medium",
+          "description": "Up to 704 KB PNG; no width/height.",
+          "recommendation": "next/image with WebP/AVIF."
+        },
+        {
+          "title": "Generic alt text",
+          "severity": "Low",
+          "description": "Alts like 'Home', 'Product'.",
+          "recommendation": "Descriptive alt per screenshot."
+        },
+        {
+          "title": "No OG image",
+          "severity": "Medium",
+          "description": "No social preview image.",
+          "recommendation": "Add 1200x630 opengraph-image."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Replace/remove all placeholder content",
+          "robots.js + sitemap.js",
+          "Canonical, OG, Twitter metadata + OG image"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Fix mobile overflow",
+          "Lazy-load and re-encode videos",
+          "Organization/WebSite/ProfessionalService JSON-LD",
+          "Privacy and Terms pages; real social links",
+          "Title, description, heading fixes"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Service pages",
+          "Case-study pages",
+          "next/image + font optimisation",
+          "Arabic version with hreflang",
+          "Blog launch"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "GSC + Bing verification and sitemap submission",
+          "Re-audit live URL for CrUX field data",
+          "llms.txt and AI visibility checks"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

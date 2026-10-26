@@ -5,7 +5,9 @@ import { useGSAP } from '@gsap/react';
 
 // Big display heading. `parts` = [[text, isAccent], ...] rendered word-by-word
 // inside overflow masks; words slide up as the heading scrolls into view.
-export default function SplitHeading({ parts, as: Tag = 'h2', className = '', block = false, marker = true }) {
+// `srTail` appends screen-reader/crawler-only text, for titles whose second half
+// is drawn by a separate decorative (`as="div" aria-hidden`) SplitHeading.
+export default function SplitHeading({ parts, as: Tag = 'h2', className = '', block = false, marker = true, srTail, ...rest }) {
   const ref = useRef(null);
   useGSAP(() => {
     gsap.from(ref.current.querySelectorAll('.w'), {
@@ -19,14 +21,15 @@ export default function SplitHeading({ parts, as: Tag = 'h2', className = '', bl
   }, { scope: ref });
 
   return (
-    <Tag ref={ref} className={`split_heading ${marker ? 'has_marker' : ''} ${className}`}>
-      {parts.map(([text, accent], i) => (
+    <Tag ref={ref} className={`split_heading ${marker ? 'has_marker' : ''} ${className}`} {...rest}>
+      {parts.filter(([text]) => text).map(([text, accent], i) => (
         <span key={i} className={`part ${accent ? 'accent' : ''} ${block ? 'block' : ''}`}>
           {text.split(' ').map((w, j) => (
             <span className="wm" key={j}><span className="w">{w}</span></span>
           ))}
         </span>
       ))}
+      {srTail && <span className="sr_only"> {srTail}</span>}
     </Tag>
   );
 }

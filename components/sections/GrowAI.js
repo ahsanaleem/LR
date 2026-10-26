@@ -2,14 +2,15 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { growAI } from '@/content/site';
-import { useSite } from '../global/SiteProvider';
+import { useSite, useContent } from '../global/SiteProvider';
 import SplitHeading from '../ui/SplitHeading';
 import Reveal from '../ui/Reveal';
 import Media from '../ui/Media';
 import { Arrow } from '../ui/Icons';
+import SiteLink from '../ui/SiteLink';
 
 export default function GrowAI() {
+  const { growAI, ui } = useContent();
   const root = useRef(null);
   const { setModalOpen } = useSite();
   useGSAP(() => {
@@ -26,6 +27,7 @@ export default function GrowAI() {
         <Reveal className="ai_copy">
           <h3>{growAI.subtitle}</h3>
           <p>{growAI.body}</p>
+          <SiteLink className="more_link" href="/services/ai-engineering">{ui.exploreAI} <Arrow size={16} /></SiteLink>
         </Reveal>
         <div className="ai_card">
           <div className="ai_bg"><Media media={growAI.media} hue={188} variant="ai" /></div>
@@ -35,9 +37,7 @@ export default function GrowAI() {
             <button className="btn btn_light btn_glow" onClick={() => setModalOpen(true)}>{growAI.cta} <Arrow size={18} /></button>
           </div>
           <div className="ai_chips" aria-hidden="true">
-            <span className="ai_chip">LLM fine-tuning</span>
-            <span className="ai_chip">Agent workflows</span>
-            <span className="ai_chip">Decision engines</span>
+            {ui.aiChips.map((t) => <span className="ai_chip" key={t}>{t}</span>)}
             <span className="ai_chip big">AI</span>
           </div>
         </div>

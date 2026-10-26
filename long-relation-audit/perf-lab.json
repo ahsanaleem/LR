@@ -1,0 +1,194 @@
+{
+ "desktop": {
+  "lcp": [
+   {
+    "t": 984,
+    "el": "VIDEO.media ",
+    "url": "http://localhost:3123/media/about/saudi-team.jpg",
+    "size": 26832
+   }
+  ],
+  "cls": 3.184049211248285e-05,
+  "tbt": 786,
+  "fcp": 984,
+  "dcl": 1442,
+  "load": 1883,
+  "sw": 1450,
+  "vw": 1440,
+  "bytes_by_type": {
+   "Document": {
+    "n": 1,
+    "kb": 12
+   },
+   "Image": {
+    "n": 15,
+    "kb": 482
+   },
+   "Stylesheet": {
+    "n": 2,
+    "kb": 13
+   },
+   "Media": {
+    "n": 9,
+    "kb": 21956
+   },
+   "Script": {
+    "n": 7,
+    "kb": 197
+   },
+   "Font": {
+    "n": 4,
+    "kb": 395
+   }
+  },
+  "total_kb": 26447,
+  "media": [
+   [
+    "/media/hero/banner-vid.mp4",
+    5270
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    1638
+   ],
+   [
+    "/media/services/mobile-apps.mp4",
+    3753
+   ],
+   [
+    "/media/services/game-dev.mp4",
+    3893
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    1639
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    1639
+   ],
+   [
+    "/media/services/growth.mp4",
+    3392
+   ],
+   [
+    "/media/ai/saudi-planning.mp4",
+    1733
+   ],
+   [
+    "/media/services/platforms.mp4",
+    2392
+   ],
+   [
+    "/_next/static/media/0b78ff376f6b9734-s.p.woff2",
+    68
+   ],
+   [
+    "/fonts/montserrat-700.ttf",
+    86
+   ],
+   [
+    "/fonts/inter-300.ttf",
+    157
+   ],
+   [
+    "/fonts/montserrat-400.ttf",
+    84
+   ]
+  ]
+ },
+ "mobile": {
+  "lcp": [
+   {
+    "t": 3784,
+    "el": "P.hero_tag",
+    "url": null,
+    "size": 17496
+   }
+  ],
+  "cls": 0.0010088970343835146,
+  "tbt": 4655,
+  "fcp": 3784,
+  "dcl": 5195,
+  "load": 8702,
+  "sw": 501,
+  "vw": 501,
+  "bytes_by_type": {
+   "Document": {
+    "n": 1,
+    "kb": 12
+   },
+   "Image": {
+    "n": 15,
+    "kb": 482
+   },
+   "Stylesheet": {
+    "n": 2,
+    "kb": 13
+   },
+   "Media": {
+    "n": 8,
+    "kb": 0
+   },
+   "Script": {
+    "n": 7,
+    "kb": 197
+   },
+   "Font": {
+    "n": 4,
+    "kb": 395
+   }
+  },
+  "total_kb": 3946,
+  "media": [
+   [
+    "/media/hero/banner-vid.mp4",
+    593
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    27
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    568
+   ],
+   [
+    "/_next/static/media/0b78ff376f6b9734-s.p.woff2",
+    68
+   ],
+   [
+    "/fonts/montserrat-700.ttf",
+    86
+   ],
+   [
+    "/media/about/saudi-team.mp4",
+    18
+   ],
+   [
+    "/media/services/mobile-apps.mp4",
+    443
+   ],
+   [
+    "/media/services/game-dev.mp4",
+    421
+   ],
+   [
+    "/fonts/montserrat-400.ttf",
+    84
+   ],
+   [
+    "/media/services/growth.mp4",
+    405
+   ],
+   [
+    "/fonts/inter-300.ttf",
+    157
+   ],
+   [
+    "/media/services/platforms.mp4",
+    373
+   ]
+  ]
+ }
+}

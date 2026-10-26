@@ -2,12 +2,14 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { services } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
 import Media from '../ui/Media';
 import { Arrow, Check, ServiceIcon } from '../ui/Icons';
+import SiteLink from '../ui/SiteLink';
+import { useContent } from '../global/SiteProvider';
 
 export default function Services() {
+  const { services, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
     gsap.from('.serv_sub', { y: 30, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.serv_sub', start: 'top 90%' } });
@@ -46,9 +48,10 @@ export default function Services() {
                 <p>{s.text}</p>
                 <ul>
                   {s.list.map((l) => (
-                    <li key={l}><a href="#contact"><Check size={22} /> <span>{l}</span> <Arrow size={16} className="li_arrow" /></a></li>
+                    <li key={l}><SiteLink href={`/services/${s.slug}`}><Check size={22} /> <span>{l}</span> <Arrow size={16} className="li_arrow" /></SiteLink></li>
                   ))}
                 </ul>
+                <SiteLink className="more_link" href={`/services/${s.slug}`}>{ui.explore(s.title)} <Arrow size={16} /></SiteLink>
               </div>
               <div className="serv_vid_box" data-cursor="view" onMouseMove={tilt} onMouseLeave={untilt}>
                 <Media media={s.media} hue={s.hue} label={s.title} />

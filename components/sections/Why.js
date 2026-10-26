@@ -2,10 +2,11 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { why } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
+import { useContent } from '../global/SiteProvider';
 
 export default function Why() {
+  const { why, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
     gsap.utils.toArray('.stat').forEach((el) => {
@@ -25,7 +26,7 @@ export default function Why() {
       <span className="why_orb" aria-hidden="true" />
       <div className="container why_grid">
         <SplitHeading parts={why.title} className="lg" block />
-        <div className="stats">
+        {why.showStats && <div className="stats">
           {why.stats.map((s) => (
             <div className="stat" key={s.label}>
               <div className="stat_num"><b data-v={s.value}>0</b>{s.suffix}</div>
@@ -33,7 +34,7 @@ export default function Why() {
               <span className="stat_label">{s.label}</span>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
     </section>
   );

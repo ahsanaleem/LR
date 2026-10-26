@@ -3,8 +3,7 @@ import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { about, brand } from '@/content/site';
-import { useSite } from '../global/SiteProvider';
+import { useSite, useContent } from '../global/SiteProvider';
 import Media from '../ui/Media';
 import { LRMark } from '../ui/Icons';
 
@@ -13,6 +12,7 @@ const docTop = (el) => { let y = 0; while (el) { y += el.offsetTop; el = el.offs
 const docLeft = (el) => { let x = 0; while (el) { x += el.offsetLeft; el = el.offsetParent; } return x; };
 
 export default function About() {
+  const { about, brand, ui } = useContent();
   const root = useRef(null);
   const { ready } = useSite();
 

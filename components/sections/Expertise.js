@@ -3,10 +3,11 @@ import { useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { expertise } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
+import { useContent } from '../global/SiteProvider';
 
 export default function Expertise() {
+  const { expertise, ui } = useContent();
   const root = useRef(null);
   const [active, setActive] = useState(0);
 
@@ -50,7 +51,7 @@ export default function Expertise() {
               <span className="exp_orbit" /><span className="exp_orbit2" />
               <span className="exp_halo" />
               {expertise.items.map((it, i) => (
-                <span key={it.title} className={`exp_glyph ${active === i ? 'on' : ''}`}><img src={it.logo} alt={`${it.title} logo`} /></span>
+                <span key={it.title} className={`exp_glyph ${active === i ? 'on' : ''}`}><img src={it.logo} alt={`${it.title} logo`} width={150} height={150} loading="lazy" decoding="async" /></span>
               ))}
               <span className="exp_count">{String(active + 1).padStart(2, '0')} / {String(expertise.items.length).padStart(2, '0')}</span>
             </div>

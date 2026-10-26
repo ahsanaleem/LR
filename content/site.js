@@ -5,29 +5,42 @@
 //  or { image: '/media/x.jpg' }. Leave empty for the built-in
 //  animated placeholder artwork.
 //  Items marked  // PLACEHOLDER  must be replaced with real data.
+//  Sections still waiting for real data have `show: false` — they
+//  are not rendered (or indexed) until you fill them in and flip it.
 // ─────────────────────────────────────────────────────────────
+
+// Production origin — used for canonical URLs, sitemap, Open Graph and schema.
+export const site = {
+  url: 'https://lr.com.sa', // TODO confirm the production domain before launch
+  title: 'Long Relation | AI App & Software Studio, Saudi Arabia',
+  description:
+    'AI-first product studio building mobile apps, games, web platforms and AI automation for companies in Saudi Arabia — from strategy to launch and beyond.',
+  ogImageAlt: 'Long Relation — AI-first product studio',
+};
 
 export const brand = {
   name: 'LONG RELATION',
   short: 'Long Relation',
-  phone: '+1 (000) 000-0000', // PLACEHOLDER
+  phone: '', // PLACEHOLDER — real number in international format, e.g. '+966 5X XXX XXXX'. Hidden while empty.
   email: 'hello@longrelation.com', // PLACEHOLDER
   supportEmail: 'support@longrelation.com', // PLACEHOLDER
-  address: 'Your street address, City, State ZIP, Country', // PLACEHOLDER
+  address: '', // PLACEHOLDER — e.g. 'King Fahd Rd, Riyadh, Saudi Arabia'. Hidden while empty.
+  // PLACEHOLDER — add each real profile URL; icons with an empty href are not rendered
   socials: [
-    { label: 'LinkedIn', href: '#', icon: 'linkedin' },
-    { label: 'X', href: '#', icon: 'x' },
-    { label: 'Facebook', href: '#', icon: 'facebook' },
-    { label: 'Instagram', href: '#', icon: 'instagram' },
+    { label: 'LinkedIn', href: '', icon: 'linkedin' },
+    { label: 'X', href: '', icon: 'x' },
+    { label: 'Facebook', href: '', icon: 'facebook' },
+    { label: 'Instagram', href: '', icon: 'instagram' },
   ],
 };
 
+// `/#id` links scroll in place on the homepage and navigate home from inner pages
 export const nav = [
-  { label: 'About Us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Our Work', href: '#work' },
-  { label: 'Blog', href: '#' },
-  { label: 'Contact Us', href: '#contact' },
+  { label: 'About Us', href: '/#about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Our Work', href: '/work' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Contact Us', href: '/#contact' },
 ];
 
 export const hero = {
@@ -35,6 +48,7 @@ export const hero = {
     [{ t: 'Empowered by ' }, { t: 'AI.', accent: true }],
     [{ t: 'Driven by ' }, { t: 'Human Vision.', bold: true }],
   ],
+  srLead: 'Long Relation is an AI-first product studio building mobile apps, games and AI software.', // H1 continuation, visually hidden
   tagline: 'Intelligence-first design,\nstrategy, and engineering\nfor products that scale.',
   since: '2021-2026',
   wordmark: 'long relation', // giant ghost word along the bottom
@@ -59,6 +73,7 @@ export const services = {
     {
       icon: 'mobile',
       title: 'Mobile Apps',
+      slug: 'mobile-app-development', // /services/mobile-app-development
       text: 'Native and cross-platform apps tuned for speed, retention and store visibility from the first release.',
       list: ['AI-Accelerated Builds', 'iOS Development', 'Android Development', 'React Native', 'Flutter'],
       media: { video: '/media/services/mobile-apps.mp4', poster: '/media/services/mobile-apps.jpg' },
@@ -67,6 +82,7 @@ export const services = {
     {
       icon: 'game',
       title: 'Game Development',
+      slug: 'game-development', // /services/game-development
       text: 'Polished games and interactive worlds for PC, console, mobile and headsets.',
       list: ['Unity Development', 'Unreal Development', 'AR / VR Experiences', 'Character & World Art'],
       media: { video: '/media/services/game-dev.mp4', poster: '/media/services/game-dev.jpg' },
@@ -75,6 +91,7 @@ export const services = {
     {
       icon: 'megaphone',
       title: 'Growth & Care',
+      slug: 'growth-and-care', // /services/growth-and-care
       text: 'Launch, visibility and long-term maintenance so your product keeps compounding after day one.',
       list: ['Performance Marketing', 'App Store Optimisation', 'Support & Upgrades'],
       media: { video: '/media/services/growth.mp4', poster: '/media/services/growth.jpg' },
@@ -83,6 +100,7 @@ export const services = {
     {
       icon: 'cube',
       title: 'Products & Platforms',
+      slug: 'products-and-platforms', // /services/products-and-platforms
       text: 'Ready-to-launch commerce and immersive tech foundations for teams that cannot afford to start from scratch.',
       list: ['Commerce Platforms', 'Immersive Technology'],
       media: { video: '/media/services/platforms.mp4', poster: '/media/services/platforms.jpg' },
@@ -111,6 +129,7 @@ export const featured = {
   items: [
     {
       name: 'Manani',
+      slug: 'manani', // /work/manani
       category: 'Dream Journal',
       year: '2025',
       kind: 'mobile',
@@ -122,16 +141,20 @@ export const featured = {
         'A social layer lets users follow friends, tag them in dreams and post interpreted stories to a community feed.',
       ],
       tags: ['React Native', 'OpenAI', 'Node.js'],
+      platforms: 'iOS & Android',
+      services: ['mobile-app-development', 'ai-engineering'],
+      built: ['Video, voice and text dream capture', 'AI interpretation of themes and mood', 'Memories archive with mood tags', 'Layered privacy with a locked “My Eyes Only” vault', 'Social feed, following and tagging'],
       from: '#0b1640',
       to: '#2c3a96',
       screens: [
-        { src: '/media/portfolio/manani-capture.png', label: 'Capture' },
-        { src: '/media/portfolio/manani-voice.png', label: 'Voice' },
-        { src: '/media/portfolio/manani-memories.png', label: 'Memories' },
+        { src: '/media/portfolio/manani-capture.webp', label: 'Capture', alt: 'Manani app dream capture screen with video, voice and text options' },
+        { src: '/media/portfolio/manani-voice.webp', label: 'Voice', alt: 'Manani app recording a dream by voice' },
+        { src: '/media/portfolio/manani-memories.webp', label: 'Memories', alt: 'Manani app Memories archive with mood-tagged dreams' },
       ],
     },
     {
       name: 'Menna',
+      slug: 'menna', // /work/menna
       category: 'Luxury Fashion',
       year: '2025',
       kind: 'mobile',
@@ -143,16 +166,20 @@ export const featured = {
         'The whole experience is fully localized in Arabic and English, with complete right-to-left support.',
       ],
       tags: ['React Native', 'Node.js', 'Stripe'],
+      platforms: 'iOS & Android',
+      services: ['mobile-app-development', 'products-and-platforms'],
+      built: ['Editorial Discover feed with seasonal lookbooks', 'Curated category rails', 'Product flow with size selection and editor styling advice', 'Full Arabic / English localisation with right-to-left support'],
       from: '#1c1510',
       to: '#7a5a32',
       screens: [
-        { src: '/media/portfolio/menna-welcome.png', label: 'Welcome' },
-        { src: '/media/portfolio/menna-discover.png', label: 'Discover' },
-        { src: '/media/portfolio/menna-product.png', label: 'Product' },
+        { src: '/media/portfolio/menna-welcome.webp', label: 'Welcome', alt: 'Menna luxury fashion app welcome screen' },
+        { src: '/media/portfolio/menna-discover.webp', label: 'Discover', alt: 'Menna app Discover feed with seasonal lookbooks and designer rails' },
+        { src: '/media/portfolio/menna-product.webp', label: 'Product', alt: 'Menna app product page with size selection and styling advice' },
       ],
     },
     {
       name: 'Menna Web',
+      slug: 'menna-web', // /work/menna-web
       category: 'Luxury Fashion — Web',
       year: '2025',
       kind: 'web',
@@ -164,12 +191,15 @@ export const featured = {
         'Checkout supports Tabby instalments, with express delivery across Riyadh, Jeddah and Dammam.',
       ],
       tags: ['Next.js', 'Node.js', 'Tabby'],
+      platforms: 'Web',
+      services: ['products-and-platforms'],
+      built: ['Bilingual editorial homepage', 'Filtered browsing across Women, Men, Beauty and Fragrance', 'Product pages with colour and size selection', 'Tabby instalment checkout', 'Express delivery across Riyadh, Jeddah and Dammam'],
       from: '#071a24',
       to: '#0a6b80',
       screens: [
-        { src: '/media/portfolio/menna-web-home.png', label: 'Home' },
-        { src: '/media/portfolio/menna-web-women.png', label: 'Women' },
-        { src: '/media/portfolio/menna-web-product.png', label: 'Product' },
+        { src: '/media/portfolio/menna-web-home.webp', label: 'Home', alt: 'Menna web storefront homepage in Arabic and English' },
+        { src: '/media/portfolio/menna-web-women.webp', label: 'Women', alt: 'Menna web Women category page with filtered product grid' },
+        { src: '/media/portfolio/menna-web-product.webp', label: 'Product', alt: 'Menna web product page with colour and size selection and Tabby instalments' },
       ],
     },
   ],
@@ -218,7 +248,8 @@ export const why = {
     ['AI-First', false],
     ['Product Studio', false],
   ],
-  // PLACEHOLDER numbers — update with real figures
+  // PLACEHOLDER numbers — update with real figures, then set showStats: true
+  showStats: false,
   stats: [
     { value: 100, suffix: '+', label: 'Projects Delivered' },
     { value: 80, suffix: '+', label: 'Team Members' },
@@ -227,8 +258,8 @@ export const why = {
 };
 
 export const awards = {
+  show: false, // PLACEHOLDER — set true once the items below are genuine awards
   title: ['AWARDS &', 'RECOGNITION'],
-  // PLACEHOLDER — replace with genuine awards only
   items: [
     { badge: 'TOP\nAPP DEV', title: 'Award Title\nGoes Here', text: 'Short description of the award, who issued it and why you received it.' },
     { badge: 'TOP\nMOBILE', title: 'Award Title\nGoes Here', text: 'Short description of the award, who issued it and why you received it.' },
@@ -239,34 +270,15 @@ export const awards = {
 };
 
 export const team = {
+  show: true,
   title: ['THE MINDS BEHIND', 'LONG RELATION'],
   intro: 'The people who write the code, design the systems and own the outcome. Senior people on every project — always.',
-  // PLACEHOLDER people
+  // `\n` sets where the big name breaks. Optional per person (hidden while empty):
+  // photo (portrait, at least 600×760, e.g. '/media/team/amer.jpg'), points (2–3 short facts), bio (one paragraph), linkedin (profile URL).
   members: [
-    {
-      name: 'Founder\nName',
-      role: 'Founder & CEO',
-      points: ['X years building digital products', 'Previously at Company', 'Focus: product & strategy'],
-      bio: 'A one-paragraph bio describing this person’s background, what they lead at Long Relation and the results they are proud of.',
-      photo: '',
-      linkedin: '#',
-    },
-    {
-      name: 'Partner\nName',
-      role: 'Chief Technology Officer',
-      points: ['X years in engineering', 'Led platform teams at Company', 'Focus: AI infrastructure'],
-      bio: 'A one-paragraph bio describing this person’s background, what they lead at Long Relation and the results they are proud of.',
-      photo: '',
-      linkedin: '#',
-    },
-    {
-      name: 'Lead\nName',
-      role: 'Head of Design',
-      points: ['X years in product design', 'Design systems & motion', 'Focus: user experience'],
-      bio: 'A one-paragraph bio describing this person’s background, what they lead at Long Relation and the results they are proud of.',
-      photo: '',
-      linkedin: '#',
-    },
+    { name: 'Amer Ahmad\nAlashi', role: 'Chief Executive Officer', points: [], bio: '', photo: '/media/team/amer-alashi.webp', linkedin: '' },
+    { name: 'Faisal\nAlyami', role: 'Chief Marketing Officer', points: [], bio: '', photo: '/media/team/faisal-alyami.webp', linkedin: '' },
+    { name: 'Muhammad Omer\nKhan', role: 'Chief Technology Officer', points: [], bio: '', photo: '/media/team/omer-khan.webp', linkedin: '' },
   ],
 };
 
@@ -277,8 +289,8 @@ export const cta = {
 };
 
 export const reviews = {
+  show: false, // PLACEHOLDER — set true once the quotes below are real, attributable testimonials
   title: ['CLIENT', 'REVIEWS'],
-  // PLACEHOLDER — replace with real, attributable testimonials
   items: [
     { quote: 'Replace this with a real client quote about working with Long Relation — what changed for their business.', name: 'Client Name', role: 'Role, Company', media: {} },
     { quote: 'Replace this with a real client quote about speed, quality or the way the team communicated.', name: 'Client Name', role: 'Role, Company', media: {} },
@@ -299,23 +311,20 @@ export const contact = {
 
 export const footer = {
   services: [
-    'AI-Accelerated Builds',
-    'iOS Development',
-    'React Native',
-    'Flutter',
-    'Unity Development',
-    'Unreal Development',
-    'AR / VR Experiences',
-    'Character & World Art',
+    { label: 'Mobile App Development', href: '/services/mobile-app-development' },
+    { label: 'Game Development', href: '/services/game-development' },
+    { label: 'AI Engineering', href: '/services/ai-engineering' },
+    { label: 'Commerce & Platforms', href: '/services/products-and-platforms' },
+    { label: 'Growth & Care', href: '/services/growth-and-care' },
+    { label: 'Case Studies', href: '/work' },
   ],
   links: [
-    { label: 'About Us', href: '#about' },
-    { label: 'Reviews', href: '#reviews' },
-    { label: 'Blog', href: '#' },
-    { label: 'Contact Us', href: '#contact' },
-    { label: 'Our Work', href: '#work' },
-    { label: 'Terms & Conditions', href: '#' },
-    { label: 'Services', href: '#services' },
-    { label: 'Privacy Policy', href: '#' },
+    { label: 'About Us', href: '/#about' },
+    { label: 'Services', href: '/services' },
+    { label: 'Our Work', href: '/work' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contact Us', href: '/#contact' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms & Conditions', href: '/terms' },
   ],
 };

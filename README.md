@@ -32,6 +32,24 @@ The hero plays `hero.media.video` (an orange iris loop, recoloured to the brand 
 
 Team photos: set `photo: '/media/team/name.jpg'` (portrait, at least 600×760).
 
+### Before launch (SEO audit follow-ups)
+`content/site.js` holds everything still waiting on real data:
+
+- `site.url` — production domain (drives canonical, sitemap, robots, Open Graph and JSON-LD). Currently `https://lr.com.sa`; confirm it.
+- `brand.phone`, `brand.address`, `brand.socials[].href` — hidden while empty. Use a real phone in international format.
+- `awards.show`, `team.show`, `reviews.show`, `why.showStats` — `false` until the content is genuine. Fake awards, people, reviews or stats hurt trust and rankings.
+- Add Blog / Privacy Policy / Terms links back to `nav` and `footer.links` once those pages exist, and list new pages in `app/sitemap.js`.
+
+Inner pages: `/services`, `/services/[slug]` (copy in `content/pages.js` → `servicePages`), `/work`, `/work/[slug]` (built from `featured.items` in `content/site.js`), `/privacy` and `/terms` (`content/pages.js` → `legal` — have a lawyer review these and add the company's legal name and CR number). New service or case-study entries get a page, a sitemap entry and structured data automatically.
+
+Languages: English at `/…`, Arabic at `/ar/…` (right-to-left). All pages live in `app/[lang]/`; `middleware.js` rewrites root URLs to `/en/…` internally and redirects any public `/en/…` URL back to the root. Copy: `content/site.js` + `content/pages.js` (English), `content/ar/site.js` + `content/ar/pages.js` (Arabic — text only; structure and media come from the English files), `content/ui.js` (buttons/labels in both languages), `content/blog.js` (posts with `en` and `ar` versions). Components read copy through `useContent()`; server pages through `getContent(lang)` (`lib/i18n.js`). Every page outputs hreflang alternates, and the sitemap lists both languages. RTL styles are in the "ARABIC / RIGHT-TO-LEFT" block at the end of `globals.css`. Have a native Arabic copywriter review `content/ar/*` and the Arabic blog posts before launch.
+
+Blog: add a post object to `content/blog.js` (newest first) — it gets `/blog/<slug>` and `/ar/blog/<slug>` pages, BlogPosting structured data, sitemap entries and a link from its related service page automatically.
+
+SEO plumbing lives in `app/layout.js` (metadata + JSON-LD), `app/robots.js`, `app/sitemap.js`, `public/og.jpg` (share image) and `public/llms.txt`. Security headers are in `next.config.mjs`.
+
+Videos are lazy: `Media.js` only downloads a clip when it nears the viewport. Keep each clip under ~1.5 MB (720p, `-crf 28`, no audio track).
+
 ### Brand colour
 Change `--accent` and `--accent-rgb` at the top of `app/globals.css`. Everything (cursor, glows, buttons, headings) follows it.
 
@@ -39,7 +57,7 @@ Change `--accent` and `--accent-rgb` at the top of `app/globals.css`. Everything
 
 ```
 app/
-  layout.js            fonts, metadata, Lenis CSS
+  layout.js            fonts (Geist + next/font Montserrat/Inter), metadata, JSON-LD, Lenis CSS
   page.js              section order
   globals.css          all styles (tokens → global layers → sections → responsive)
 components/

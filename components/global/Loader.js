@@ -7,6 +7,7 @@ import { LRMark, Logo } from '../ui/Icons';
 
 // Full-screen intro: the LR mark's two strokes slide in, the wordmark wipes up, a % counter
 // runs to 100, then 10 vertical strips lift away (staggered) to reveal the page.
+// Plays once per browser session; repeat views in the same session only get the quick strip lift.
 export default function Loader() {
   const root = useRef(null);
   const { setReady } = useSite();
@@ -14,20 +15,30 @@ export default function Loader() {
 
   useGSAP(
     () => {
+      let seen = false;
+      try { seen = sessionStorage.getItem('lr_intro') === '1'; sessionStorage.setItem('lr_intro', '1'); } catch {}
+      if (seen) {
+        gsap.set('.ld_inner', { opacity: 0 });
+        gsap.timeline()
+          .to('.ld_strip', { yPercent: -100, duration: 0.6, ease: 'power4.inOut', stagger: { each: 0.03, from: 'start' } })
+          .add(() => setReady(true), 0.15)
+          .add(() => setDone(true));
+        return;
+      }
       const counter = { v: 0 };
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
       tl.from('.ld_mark polygon', { opacity: 0, x: (i) => (i ? -60 : 60), y: (i) => (i ? 60 : -60), duration: 1.1, ease: 'power3.out', stagger: 0.15 })
         .from('.ld_word img', { yPercent: 110, duration: 0.9 }, 0.45)
         .to(counter, {
           v: 100,
-          duration: 1.8,
+          duration: 1.2,
           ease: 'power1.inOut',
           onUpdate: () => {
             const el = root.current?.querySelector('.ld_count');
             if (el) el.textContent = String(Math.round(counter.v)).padStart(3, '0');
           },
         }, 0)
-        .to('.ld_bar i', { scaleX: 1, duration: 1.8, ease: 'power1.inOut' }, 0)
+        .to('.ld_bar i', { scaleX: 1, duration: 1.2, ease: 'power1.inOut' }, 0)
         .to('.ld_inner', { opacity: 0, y: -30, duration: 0.5, ease: 'power2.in' }, '+=0.15')
         .to('.ld_strip', { yPercent: -100, duration: 0.8, ease: 'power4.inOut', stagger: { each: 0.05, from: 'start' } }, '-=0.1')
         .add(() => setReady(true), '-=0.55')

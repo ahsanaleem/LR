@@ -2,12 +2,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { brand, nav } from '@/content/site';
-import { useSite } from './SiteProvider';
+import { useSite, useContent } from './SiteProvider';
 import { Logo } from '../ui/Icons';
+import { telHref } from '@/lib/format';
+import SiteLink from '../ui/SiteLink';
+import { usePathname } from 'next/navigation';
+import { swapLang } from '@/lib/i18n';
 
 export default function Header() {
-  const { ready, setModalOpen, scrollTo } = useSite();
+  const { brand, nav, ui } = useContent();
+  const { ready, setModalOpen, lang } = useSite();
+  const pathname = usePathname();
+  const other = lang === 'ar' ? 'en' : 'ar';
   const [open, setOpen] = useState(false);
   const root = useRef(null);
   const tl = useRef(null);
@@ -41,30 +47,28 @@ export default function Header() {
     return () => window.removeEventListener('keydown', esc);
   }, []);
 
-  const go = (e, href) => {
-    if (href.startsWith('#') && href.length > 1) { e.preventDefault(); scrollTo(href); }
-    setOpen(false);
-  };
 
   return (
     <header className="site_header" ref={root}>
-      <a href="#top" className="logo hdr_anim" onClick={(e) => go(e, '#top')}>
+      <SiteLink href="/#top" className="logo hdr_anim" aria-label={`${brand.short} ${ui.homeLabel}`}>
         <Logo height={40} alt={brand.short} />
-      </a>
-      <button className="btn btn_solid hdr_anim quote_btn" onClick={() => setModalOpen(true)}>GET A QUOTE</button>
+      </SiteLink>
+      {/* full page load on purpose: the other language has its own lang/dir, fonts and copy */}
+      <a className="lang_switch hdr_anim" href={swapLang(pathname, other)} hrefLang={other} lang={other} title={ui.switchLabel}>{ui.switchTo}</a>
+      <button className="btn btn_solid hdr_anim quote_btn" onClick={() => setModalOpen(true)}>{ui.getQuote}</button>
       <div className="menu_wrap">
-        <button className={`menu_btn ${open ? 'is_open' : ''}`} aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <button className={`menu_btn ${open ? 'is_open' : ''}`} aria-label={ui.menu} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
           {Array.from({ length: 9 }).map((_, i) => <span key={i} className="cell" />)}
         </button>
         <nav className="menu_panel" aria-hidden={!open}>
           <ul>
             {nav.map((n) => (
-              <li key={n.label}><a className="menu_link" href={n.href} onClick={(e) => go(e, n.href)}>{n.label}</a></li>
+              <li key={n.label}><SiteLink className="menu_link" href={n.href} onClick={() => setOpen(false)}>{n.label}</SiteLink></li>
             ))}
           </ul>
           <div className="menu_contact">
-            <small>CONTACT US</small>
-            <a href={`tel:${brand.phone}`}>{brand.phone}</a>
+            <small>{ui.contactUs}</small>
+            {brand.phone && <a href={`tel:${telHref(brand.phone)}`}>{brand.phone}</a>}
             <a href={`mailto:${brand.email}`}>{brand.email}</a>
             <a href={`mailto:${brand.supportEmail}`}>{brand.supportEmail}</a>
           </div>

@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { useSite } from './SiteProvider';
+import { useSite, useContent } from './SiteProvider';
 import ContactForm from '../ui/ContactForm';
 
 export default function QuoteModal() {
   const { modalOpen, setModalOpen } = useSite();
+  const { ui } = useContent();
   const root = useRef(null);
 
   useEffect(() => {
@@ -25,12 +26,12 @@ export default function QuoteModal() {
   }, [modalOpen, setModalOpen]);
 
   return (
-    <div className="modal" ref={root} style={{ display: 'none' }} role="dialog" aria-modal="true" aria-label="Get a quote">
+    <div className="modal" ref={root} style={{ display: 'none' }} role="dialog" aria-modal="true" aria-label={ui.quoteTitle}>
       <div className="modal_bg" onClick={() => setModalOpen(false)} />
       <div className="modal_card" data-lenis-prevent>
-        <button className="modal_close" aria-label="Close" onClick={() => setModalOpen(false)}>×</button>
-        <h3>Get a Quote</h3>
-        <p>Tell us about your product. We reply within 24 hours.</p>
+        <button className="modal_close" aria-label={ui.close} onClick={() => setModalOpen(false)}>×</button>
+        <h3>{ui.quoteTitle}</h3>
+        <p>{ui.quoteSub}</p>
         <ContactForm onDone={() => setModalOpen(false)} compact />
       </div>
     </div>

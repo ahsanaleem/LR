@@ -2,10 +2,11 @@
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { awards } from '@/content/site';
 import SplitHeading from '../ui/SplitHeading';
+import { useContent } from '../global/SiteProvider';
 
 export default function Awards() {
+  const { awards, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
     gsap.from('.award_card', { y: 90, opacity: 0, scale: 0.94, duration: 1, ease: 'power3.out', stagger: { each: 0.12, grid: 'auto' }, scrollTrigger: { trigger: '.award_grid', start: 'top 80%' } });
