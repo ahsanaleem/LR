@@ -73,11 +73,14 @@ export default function Featured() {
       // fade-up entrance, screens fan out a beat later
       gsap.fromTo(card, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: card, start: 'top 92%', toggleActions: 'play none none reverse' } });
       gsap.from(card.querySelectorAll('.feat_screens figure'), { y: 120, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: card, start: 'top 75%' } });
-      // stacked-deck effect: as the next card slides over, this one shrinks & dims
+      // stacked-deck effect: only while the next card is actually sliding over this one,
+      // it eases back slightly and softens — never fades out — so the stack blends smoothly
       if (i < cards.length - 1) {
-        gsap.to(card.querySelector('.feat_inner'), {
-          scale: 0.9, filter: 'brightness(0.45)', ease: 'none',
-          scrollTrigger: { trigger: cards[i + 1], start: 'top bottom', end: 'top 18%', scrub: true },
+        const nextTop = 90 + (i + 1) * 18; // the next card's sticky offset (see `top` below)
+        // explicit start value: tweening from filter "none" makes GSAP start at brightness(0) — a black flash
+        gsap.fromTo(card.querySelector('.feat_inner'), { scale: 1, filter: 'brightness(1)' }, {
+          scale: 0.95, filter: 'brightness(0.72)', ease: 'power1.inOut',
+          scrollTrigger: { trigger: cards[i + 1], start: 'top 65%', end: `top ${nextTop}px`, scrub: 0.6 },
         });
       }
     });

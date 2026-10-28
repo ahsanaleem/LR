@@ -16,7 +16,6 @@ export default function Team() {
   const { team, ui } = useContent();
   const root = useRef(null);
   useGSAP(() => {
-    gsap.from('.team_intro', { y: 30, opacity: 0, duration: 1, scrollTrigger: { trigger: '.team_intro', start: 'top 90%' } });
     // All leaders visible at once: cards rise in with a stagger, photos drift gently on scroll
     gsap.from('.member', { y: 60, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: '.team_grid', start: 'top 80%' } });
     gsap.utils.toArray('.member_photo .ph').forEach((ph) => {
@@ -29,7 +28,7 @@ export default function Team() {
       <div className="container team_head">
         <SplitHeading parts={[[team.title[0], false]]} className="xl" srTail={team.title[1]} />
         <div className="feat_row">
-          <p className="team_intro">{team.intro}</p>
+          {team.intro && <p className="team_intro">{team.intro}</p>}
           <SplitHeading parts={[[team.title[1], true]]} className="xl" marker={false} as="div" aria-hidden />
         </div>
       </div>

@@ -14,8 +14,8 @@ export const site = {
   url: 'https://lr.com.sa', // TODO confirm the production domain before launch
   title: 'Long Relation | AI App & Software Studio, Saudi Arabia',
   description:
-    'AI-first product studio building mobile apps, games, web platforms and AI automation for companies in Saudi Arabia — from strategy to launch and beyond.',
-  ogImageAlt: 'Long Relation — AI-first product studio',
+    'AI-first product studio building mobile apps, games, web platforms and AI automation for companies in Saudi Arabia, from first strategy through launch and long-term support.',
+  ogImageAlt: 'Long Relation, AI-first product studio',
 };
 
 export const brand = {
@@ -62,7 +62,7 @@ export const about = {
   eyebrow: ['ABOUT', 'US'],
   title: 'we build the intelligence behind the interface',
   body:
-    'Long Relation is a product studio that designs and engineers software across web, mobile, 3D, XR and AI automation. We start with how your business makes money — not with screens. We trace the revenue path, find where people drop off, and plan an architecture that holds up under real traffic. The result is software that pulls its weight in the market, not a concept that lives in a pitch deck.',
+    'Long Relation is a product studio that designs and engineers software across web, mobile, 3D, XR and AI automation. Every project starts with how your business makes money. We trace the revenue path, find where people drop off, and plan an architecture that holds up under real traffic. Then we design and build software that earns its place in the market.',
   media: { video: '/media/about/saudi-team.mp4', poster: '/media/about/saudi-team.jpg' },
 };
 
@@ -92,7 +92,7 @@ export const services = {
       icon: 'megaphone',
       title: 'Growth & Care',
       slug: 'growth-and-care', // /services/growth-and-care
-      text: 'Launch, visibility and long-term maintenance so your product keeps compounding after day one.',
+      text: 'Launch, visibility and long-term maintenance so your product keeps improving long after launch.',
       list: ['Performance Marketing', 'App Store Optimisation', 'Support & Upgrades'],
       media: { video: '/media/services/growth.mp4', poster: '/media/services/growth.jpg' },
       hue: 178,
@@ -112,7 +112,7 @@ export const services = {
 export const expertise = {
   title: ['OUR', 'EXPERTISE'],
   intro:
-    'The tools we pick, and the reasons behind them. We are flexible on stack but firm on quality.\nEverything listed here is something we ship to production — not a logo wall.',
+    'The tools we pick, and the reasons behind them. We are flexible on stack and strict on quality.\nWe ship every one of these to production.',
   items: [
     { cat: 'Games', title: 'Unity', text: 'Cross-platform 3D for mobile, console and XR, tuned for frame rate and battery life.', logo: '/tech/unity.svg' },
     { cat: 'Games', title: 'Unreal Engine', text: 'Cinematic worlds and photoreal rendering for high-end interactive products.', logo: '/tech/unreal-engine.svg' },
@@ -124,7 +124,7 @@ export const expertise = {
 
 export const featured = {
   title: ['FEATURED', 'PROJECTS'],
-  intro: 'Real products we designed and engineered end to end — from first sketch to the app store.',
+  intro: 'Real products we designed and engineered end to end, from the first sketch to the app store.',
   // Case studies from lr.com.sa. `kind` picks the frame: 'mobile' = phone screens, 'web' = browser windows.
   items: [
     {
@@ -136,7 +136,7 @@ export const featured = {
       tagline: 'Dreams, Interpreted and Shared',
       summary: 'A social dream journal that turns each night’s dreams into AI-interpreted stories you can keep private or share.',
       description: [
-        'Manani lets people record a dream the moment they wake up — by video, voice or text — and get an AI interpretation of its themes and mood within seconds.',
+        'Manani lets people record a dream the moment they wake up, by video, voice or text, and get an AI interpretation of its themes and mood within seconds.',
         'We designed and built the full iOS and Android apps: multi-modal capture, the interpretation engine, and a Memories archive with mood tags and layered privacy, including a locked "My Eyes Only" vault.',
         'A social layer lets users follow friends, tag them in dreams and post interpreted stories to a community feed.',
       ],
@@ -180,7 +180,7 @@ export const featured = {
     {
       name: 'Menna Web',
       slug: 'menna-web', // /work/menna-web
-      category: 'Luxury Fashion — Web',
+      category: 'Luxury Fashion, Web',
       year: '2025',
       kind: 'web',
       tagline: 'The Storefront, On Every Screen',
@@ -213,12 +213,12 @@ export const engagement = {
     {
       title: 'Project-Based\nDelivery',
       center: 'YOU',
-      text: 'A clear scope, budget and launch date. A dedicated project lead and an engineering pod own the build from concept to release — fixed scope, fixed timeline, predictable result.',
+      text: 'A clear scope, budget and launch date. A dedicated project lead and an engineering pod own the build from concept to release, with a fixed scope and timeline.',
     },
     {
       title: 'Dedicated\nTeam',
       center: 'logo',
-      text: 'For bigger or longer programmes we field a complete squad — strategy, design and engineering — working as one unit. Fewer hand-offs, faster calls, better output.',
+      text: 'For bigger or longer programmes we field a complete squad of strategists, designers and engineers working as one unit, with fewer hand-offs and faster decisions.',
     },
     {
       title: 'Staff\nAugmentation',
@@ -232,10 +232,10 @@ export const growAI = {
   title: ['GROW WITH', 'AI'],
   subtitle: 'Turning Companies Into AI-Native Operators',
   body:
-    'We build the AI inside your product and the automations that run quietly behind your operation — fine-tuned language models, decision engines that act, and agent workflows tied to real revenue. AI is never the goal on its own; a capability your team keeps using is.',
+    'We build AI features into your product and automate the work behind your operations: fine-tuned language models, decision engines and agent workflows tied to measurable business results. We measure success by whether your team keeps using what we build.',
   cardTitle: 'Automate, Optimise\nand Scale With AI',
   cardText:
-    'Strategy, engineering and data under one roof, so your organisation can run AI in production. Custom LLM, automated decisioning or an in-product agent — we turn it into measurable, revenue-linked capability.',
+    'Strategy, engineering and data under one roof, so your organisation can run AI in production. Whether you need a custom LLM, automated decisions or an in-product agent, we build it and measure its impact on revenue.',
   cta: 'Book a Consultation',
   media: { video: '/media/ai/saudi-planning.mp4', poster: '/media/ai/saudi-planning.jpg' },
 };
@@ -272,7 +272,7 @@ export const awards = {
 export const team = {
   show: true,
   title: ['THE MINDS BEHIND', 'LONG RELATION'],
-  intro: 'The people who write the code, design the systems and own the outcome. Senior people on every project — always.',
+  intro: '', // optional line beside the heading; hidden while empty
   // `\n` sets where the big name breaks. Optional per person (hidden while empty):
   // photo (portrait, at least 600×760, e.g. '/media/team/amer.jpg'), points (2–3 short facts), bio (one paragraph), linkedin (profile URL).
   members: [
@@ -301,11 +301,11 @@ export const reviews = {
 
 export const contact = {
   title: 'Ready to bring the right technology into your business?',
-  text: 'Long Relation pairs modern tools with deep experience and real curiosity — our team turns your idea into a working product.',
+  text: 'Long Relation pairs modern tools with deep experience. Our team turns your idea into a working product.',
   sub: 'Sign up for a free consultation.',
   callLabel: 'Give us a call',
   formTitle: "Let's Get In Touch",
-  formSub: 'We reply within 24 hours — usually sooner.',
+  formSub: 'We reply within 24 hours, usually sooner.',
   submit: 'Submit Request',
 };
 

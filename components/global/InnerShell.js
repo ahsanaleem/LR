@@ -5,6 +5,7 @@ import Cursor from './Cursor';
 import Header from './Header';
 import QuoteModal from './QuoteModal';
 import Footer from '../sections/Footer';
+import InnerFx from '../inner/InnerFx';
 
 // No intro loader on inner pages — mark the site ready straight away so the header and Lenis start.
 function Ready() {
@@ -20,7 +21,11 @@ export default function InnerShell({ lang, children }) {
       <Ready />
       <Cursor />
       <Header />
-      <main className="inner">{children}</main>
+      <div className="read_progress" aria-hidden="true"><i /></div>
+      <main className="inner">
+        {children}
+        <InnerFx />
+      </main>
       <Footer />
       <QuoteModal />
     </SiteProvider>

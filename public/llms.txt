@@ -1,6 +1,6 @@
 # Long Relation
 
-> AI-first product studio that designs and engineers mobile apps, games, web platforms and AI automation for companies in Saudi Arabia and the wider Gulf — from strategy and design to launch, growth and long-term care.
+> AI-first product studio that designs and engineers mobile apps, games, web platforms and AI automation for companies in Saudi Arabia and the wider Gulf, covering strategy, design, launch, growth and long-term care.
 
 ## Services
 - Mobile Apps: native iOS and Android, React Native and Flutter apps built for speed, retention and store visibility.

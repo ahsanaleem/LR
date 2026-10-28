@@ -24,7 +24,7 @@ export default async function WorkIndex({ params }) {
         breadcrumbLd(trail, lang),
         { '@type': 'ItemList', itemListElement: featured.items.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(`/work/${p.slug}`, lang), name: p.name })) },
       ]} />
-      <PageHero lang={lang} trail={trail} eyebrow={ui.caseStudies} title={workIndex.title} lead={workIndex.lead} />
+      <PageHero lang={lang} trail={trail} eyebrow={ui.caseStudies} title={workIndex.title} lead={workIndex.lead} strip={featured.items.flatMap((p) => [p.name, p.category])} />
       <section className="pg_section">
         <div className="container work_list">
           {featured.items.map((p) => (
