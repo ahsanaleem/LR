@@ -117,7 +117,7 @@ export const posts = [
         ['h2', 'Monitor it like any production system'],
         ['p', 'Models, prompts and your own data all change over time. Log inputs and outputs (within your privacy rules), re-run the evaluation set regularly, watch for rising costs or slower responses, and collect user feedback directly in the interface. AI features are never “done”; they are maintained.'],
         ['h2', 'Summary'],
-        ['p', 'Choosing a model is usually the quickest step. The value comes from the system around it: a clear metric, an evaluation set, grounding in your data, guardrails, cost control and monitoring. Our AI engineering team works this way, and it is how we built the dream interpretation engine in the Manani app.'],
+        ['p', 'Choosing a model is usually the quickest step. The value comes from the system around it: a clear metric, an evaluation set, grounding in your data, guardrails, cost control and monitoring. Our AI engineering team works this way, and it is how we built the dream interpretation engine in the Manami app.'],
       ],
     },
     ar: {
@@ -146,7 +146,7 @@ export const posts = [
         ['h2', 'راقبها كأي نظام في بيئة الإنتاج'],
         ['p', 'النماذج والأوامر وبياناتك كلها تتغيّر مع الوقت. سجّل المدخلات والمخرجات (ضمن قواعد الخصوصية لديك)، وأعد تشغيل مجموعة التقييم بانتظام، وراقب ارتفاع التكلفة أو بطء الاستجابة، واجمع ملاحظات المستخدمين مباشرة من الواجهة. مزايا الذكاء الاصطناعي لا «تنتهي» أبدًا؛ بل تُصان.'],
         ['h2', 'ملخص'],
-        ['p', 'اختيار النموذج غالبًا أسرع خطوة. القيمة تأتي من النظام المحيط به: مؤشر واضح، ومجموعة تقييم، وارتباط ببياناتك، وضوابط أمان، وتحكم في التكلفة، ومراقبة. وبهذه الطريقة يعمل فريق هندسة الذكاء الاصطناعي لدينا، وبها بنينا محرك تفسير الأحلام في تطبيق Manani.'],
+        ['p', 'اختيار النموذج غالبًا أسرع خطوة. القيمة تأتي من النظام المحيط به: مؤشر واضح، ومجموعة تقييم، وارتباط ببياناتك، وضوابط أمان، وتحكم في التكلفة، ومراقبة. وبهذه الطريقة يعمل فريق هندسة الذكاء الاصطناعي لدينا، وبها بنينا محرك تفسير الأحلام في تطبيق Manami.'],
       ],
     },
   },

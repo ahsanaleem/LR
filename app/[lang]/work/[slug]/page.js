@@ -56,6 +56,7 @@ export default async function CaseStudyPage({ params }) {
 
       <PageHero lang={lang} trail={trail} eyebrow={`${p.category} · ${p.year}`} title={`${p.name}: ${p.tagline}`} lead={p.summary} strip={[p.name, p.platforms, ...p.tags, p.category]}>
         <QuoteButton>{ui.startSimilar}</QuoteButton>
+        {p.url && <a className="btn btn_ghost" href={p.url} target="_blank" rel="noopener">{ui.visitSite} <Arrow size={18} /></a>}
       </PageHero>
 
       <section className="pg_section case_page" style={{ '--from': p.from, '--to': p.to }}>
@@ -103,8 +104,19 @@ export default async function CaseStudyPage({ params }) {
 
       <section className="pg_section">
         <div className="container next_case">
-          <small className="pg_eyebrow">{ui.nextCase}</small>
-          <Link href={lp(lang, `/work/${next.slug}`)} className="next_link">{next.name} <Arrow size={28} /></Link>
+          <Link href={lp(lang, `/work/${next.slug}`)} className="next_card" style={{ '--from': next.from, '--to': next.to }}>
+            <span className="next_ghost" aria-hidden="true">{next.name}</span>
+            <span className="next_copy">
+              <span className="next_kicker"><i aria-hidden="true" />{ui.nextCase} · {String(items.indexOf(next) + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</span>
+              <span className="next_name">{next.name}</span>
+              <span className="next_tag">{next.tagline}</span>
+              <span className="next_meta">{next.category.includes(next.platforms) ? next.category : `${next.category} · ${next.platforms}`}</span>
+              <span className="next_cta"><span className="next_go"><Arrow size={24} /></span>{ui.readCase}</span>
+            </span>
+            <span className={`next_shots is_${next.kind}`} aria-hidden="true">
+              {next.screens.slice(0, 2).map((s) => <img key={s.src} src={s.src} alt="" loading="lazy" decoding="async" />)}
+            </span>
+          </Link>
         </div>
       </section>
     </InnerShell>

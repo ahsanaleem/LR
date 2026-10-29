@@ -15,9 +15,11 @@
 - Staff augmentation: vetted senior engineers, designers and product people inside your team.
 
 ## Case studies
-- Manani: social dream journal (iOS/Android) with video, voice and text capture and AI dream interpretation.
+- Manami: social dream journal (iOS/Android) with video, voice and text capture and AI dream interpretation.
 - Menna: bilingual Arabic/English luxury fashion marketplace app featuring Saudi designers, with full RTL support.
 - Menna Web: the Menna storefront on the web with Tabby instalment checkout and express delivery across Riyadh, Jeddah and Dammam.
+- LetsLink: Arabic-first digital identity platform giving Saudi small businesses and freelancers one bilingual page and link, with WhatsApp, call and order buttons, service menus and visitor analytics.
+- Global Image Award Middle East: website for a Dubai-based business awards programme recognising leaders across 15 industries, with nominations, award categories and a searchable winners archive.
 
 ## Key pages
 - Services: https://lr.com.sa/services

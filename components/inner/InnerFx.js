@@ -46,6 +46,7 @@ export default function InnerFx() {
     reveal('.card, .post_card, .svc_row', { y: 60, opacity: 0 });
     reveal('.steps li', { y: 50, opacity: 0, scale: 0.96 }, 0.12);
     reveal('.work_row', { y: 80, opacity: 0, scale: 0.97 }, 0.15);
+    reveal('.wv_main, .wv_tabs button', { y: 50, opacity: 0 }, 0.1);
     reveal('.link_list li, .faq details, .tick_list li', { x: -30 * rtl, opacity: 0 }, 0.06);
     reveal('.prose > p, .prose > section, .article_body > *', { y: 26, opacity: 0 }, 0.05);
     reveal('.pg_lead_inline, .article_meta, .article_cta, .cta_band', { y: 40, opacity: 0 });
@@ -62,7 +63,7 @@ export default function InnerFx() {
     });
 
     // ── case study screens: fan in, then drift at different speeds
-    gsap.utils.toArray('.case_page figure').forEach((fig, i, all) => {
+    gsap.utils.toArray('.case_gallery.is_mobile figure').forEach((fig, i, all) => {
       const mid = (all.length - 1) / 2;
       gsap.from(fig, { y: 160, rotate: (i - mid) * 8 * rtl, opacity: 0, duration: 1.3, ease: 'power4.out', delay: i * 0.12, scrollTrigger: { trigger: fig, start: 'top 95%' } });
       gsap.to(fig, { yPercent: (i - mid) * -10 - 4, ease: 'none', scrollTrigger: { trigger: fig.closest('.pg_section'), start: 'top bottom', end: 'bottom top', scrub: true } });
@@ -74,7 +75,9 @@ export default function InnerFx() {
     });
 
     // ── next-case link and CTA: slide in from the side
-    gsap.from('.next_link', { xPercent: 12 * rtl, opacity: 0, duration: 1.2, ease: 'power4.out', scrollTrigger: { trigger: '.next_case', start: 'top 85%' } });
+    gsap.from('.next_card', { y: 90, opacity: 0, scale: 0.96, duration: 1.2, ease: 'power4.out', scrollTrigger: { trigger: '.next_case', start: 'top 88%' } });
+    gsap.from('.next_shots img', { y: 160, rotate: 10 * rtl, opacity: 0, duration: 1.3, ease: 'power4.out', stagger: 0.15, delay: 0.25, scrollTrigger: { trigger: '.next_case', start: 'top 85%' } });
+    gsap.fromTo('.next_ghost', { xPercent: 8 * rtl }, { xPercent: -10 * rtl, ease: 'none', scrollTrigger: { trigger: '.next_case', start: 'top bottom', end: 'bottom top', scrub: true } });
 
     // ── reading progress bar
     gsap.to('.read_progress i', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });

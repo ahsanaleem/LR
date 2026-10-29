@@ -15,7 +15,7 @@ export const servicesIndex = {
 export const workIndex = {
   metaTitle: 'Our Work | Case Studies | Long Relation',
   metaDescription:
-    'Case studies of apps and platforms Long Relation designed and engineered end to end, including Manani and the bilingual Menna luxury fashion marketplace.',
+    'Case studies of apps and platforms Long Relation designed and engineered end to end, including Manami and the bilingual Menna luxury fashion marketplace.',
   title: 'Our Work',
   lead: 'Real products we designed and engineered end to end, from the first sketch to the app store.',
 };
@@ -56,7 +56,7 @@ export const servicePages = [
       { q: 'Do you handle App Store and Google Play publishing?', a: 'Yes. We prepare the builds, store listings, screenshots and privacy declarations, submit the app, and respond to any review feedback until it is live.' },
       { q: 'What happens after launch?', a: 'Most clients keep us on for updates, OS compatibility, monitoring and new features. See our Growth & Care service for how that works.' },
     ],
-    work: ['manani', 'menna'],
+    work: ['manami', 'menna'],
   },
   {
     slug: 'game-development',
@@ -109,7 +109,7 @@ export const servicePages = [
       'For organisations in Saudi Arabia, we design for Arabic from the start, including Arabic and mixed Arabic/English input and evaluation that accounts for dialects. Data protection requirements such as the Personal Data Protection Law (PDPL) also shape where data is stored and which models can see it.',
     ],
     offerings: [
-      { title: 'In-product AI features', text: 'Assistants, smart search, summarisation, content generation and interpretation built into web and mobile apps, like the dream interpretation engine we built for Manani.' },
+      { title: 'In-product AI features', text: 'Assistants, smart search, summarisation, content generation and interpretation built into web and mobile apps, like the dream interpretation engine we built for Manami.' },
       { title: 'LLM integration & fine-tuning', text: 'Retrieval-augmented generation over your own data, prompt and model evaluation, and fine-tuning when an off-the-shelf model is not enough.' },
       { title: 'AI agents & workflow automation', text: 'Agents that read, decide and act across your tools, such as CRM, email, ticketing and ERP, with human approval where it matters.' },
       { title: 'Decision engines', text: 'Scoring, routing and recommendation systems that make or support operational decisions automatically.' },
@@ -127,7 +127,7 @@ export const servicePages = [
       { q: 'How do you keep our data safe?', a: 'We design data flows around your security and compliance requirements, including where data is processed and stored, which providers can access it, and how long it is retained.' },
       { q: 'How do we know it is working?', a: 'Every AI feature ships with an evaluation set and production monitoring, so quality, cost and latency are measured continuously rather than judged by impression.' },
     ],
-    work: ['manani'],
+    work: ['manami'],
   },
   {
     slug: 'products-and-platforms',
@@ -161,7 +161,7 @@ export const servicePages = [
       { q: 'Will the store work in Arabic and English?', a: 'Yes. Bilingual catalogues and full right-to-left layouts on web and mobile are standard in our commerce builds.' },
       { q: 'Should we use Shopify or build a custom platform?', a: 'Hosted platforms are a great start for simple catalogues. Custom or headless builds make sense for marketplaces, complex catalogues, unusual checkout flows or when performance and brand control matter most. We will recommend the option with the best long-term cost.' },
     ],
-    work: ['menna-web', 'menna'],
+    work: ['menna-web', 'menna', 'letslink', 'global-image-award'],
   },
   {
     slug: 'growth-and-care',

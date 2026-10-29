@@ -128,15 +128,15 @@ export const featured = {
   // Case studies from lr.com.sa. `kind` picks the frame: 'mobile' = phone screens, 'web' = browser windows.
   items: [
     {
-      name: 'Manani',
-      slug: 'manani', // /work/manani
+      name: 'Manami',
+      slug: 'manami', // /work/manami
       category: 'Dream Journal',
       year: '2025',
       kind: 'mobile',
       tagline: 'Dreams, Interpreted and Shared',
       summary: 'A social dream journal that turns each night’s dreams into AI-interpreted stories you can keep private or share.',
       description: [
-        'Manani lets people record a dream the moment they wake up, by video, voice or text, and get an AI interpretation of its themes and mood within seconds.',
+        'Manami lets people record a dream the moment they wake up, by video, voice or text, and get an AI interpretation of its themes and mood within seconds.',
         'We designed and built the full iOS and Android apps: multi-modal capture, the interpretation engine, and a Memories archive with mood tags and layered privacy, including a locked "My Eyes Only" vault.',
         'A social layer lets users follow friends, tag them in dreams and post interpreted stories to a community feed.',
       ],
@@ -147,9 +147,9 @@ export const featured = {
       from: '#0b1640',
       to: '#2c3a96',
       screens: [
-        { src: '/media/portfolio/manani-capture.webp', label: 'Capture', alt: 'Manani app dream capture screen with video, voice and text options' },
-        { src: '/media/portfolio/manani-voice.webp', label: 'Voice', alt: 'Manani app recording a dream by voice' },
-        { src: '/media/portfolio/manani-memories.webp', label: 'Memories', alt: 'Manani app Memories archive with mood-tagged dreams' },
+        { src: '/media/portfolio/manami-capture.webp', label: 'Capture', alt: 'Manami app dream capture screen with video, voice and text options' },
+        { src: '/media/portfolio/manami-voice.webp', label: 'Voice', alt: 'Manami app recording a dream by voice' },
+        { src: '/media/portfolio/manami-memories.webp', label: 'Memories', alt: 'Manami app Memories archive with mood-tagged dreams' },
       ],
     },
     {
@@ -200,6 +200,58 @@ export const featured = {
         { src: '/media/portfolio/menna-web-home.webp', label: 'Home', alt: 'Menna web storefront homepage in Arabic and English' },
         { src: '/media/portfolio/menna-web-women.webp', label: 'Women', alt: 'Menna web Women category page with filtered product grid' },
         { src: '/media/portfolio/menna-web-product.webp', label: 'Product', alt: 'Menna web product page with colour and size selection and Tabby instalments' },
+      ],
+    },
+    {
+      name: 'LetsLink',
+      slug: 'letslink', // /work/letslink
+      category: 'Digital Identity, Web',
+      year: '2026',
+      kind: 'web',
+      url: 'https://letslink.com.sa/',
+      tagline: 'One Link for Every Business',
+      summary: 'An Arabic-first platform that gives Saudi small businesses and freelancers one page to be found, trusted and contacted.',
+      description: [
+        'LetsLink gives cafés, salons, clinics, shops and freelancers a single page and a single link they can put in their bio, on a QR code, in an email signature or on WhatsApp.',
+        'We designed and built the platform: a page editor with live preview that publishes in minutes, WhatsApp, call and order buttons, service menus with prices, opening hours and locations, plus ready-made templates by industry.',
+        'Pages are built Arabic-first and mirror fully into English, and owners get analytics on visits, taps and top cities, with free and Plus plans priced in SAR.',
+      ],
+      tags: ['Next.js', 'Node.js', 'Cloudflare'],
+      platforms: 'Web',
+      services: ['products-and-platforms'],
+      built: ['Page editor with live preview', 'WhatsApp, call and order buttons', 'Service menus with prices, hours and location', 'Industry templates for cafés, salons, clinics and creators', 'Visitor analytics with top cities', 'Arabic-first pages that mirror fully into English'],
+      from: '#061226',
+      to: '#0d6f6a',
+      screens: [
+        { src: '/media/portfolio/letslink-home.webp', label: 'Home', alt: 'LetsLink homepage with a creator profile page on a phone and a claim-your-link field' },
+        { src: '/media/portfolio/letslink-share.webp', label: 'Share', alt: 'LetsLink sharing options: in your bio, on a QR code, in an email signature and on WhatsApp' },
+        { src: '/media/portfolio/letslink-connect.webp', label: 'Connect', alt: 'LetsLink WhatsApp, call and order buttons above a café menu with prices' },
+      ],
+    },
+    {
+      name: 'Global Image Award',
+      slug: 'global-image-award', // /work/global-image-award
+      category: 'Business Awards, Web',
+      year: '2025',
+      kind: 'web',
+      url: 'https://www.globalimageawards.com/',
+      tagline: 'Celebrating Leadership Across the Middle East',
+      summary: 'The website for Global Image Award Middle East, which recognises CEOs, industrialists and business leaders across 15 industries.',
+      description: [
+        'Global Image Award Middle East honours business leaders for their contribution to their industries and economies, with an awards night in Dubai each year.',
+        'We designed and built the website: nominations with key dates, the 15 recognised industries and award categories, ambassadors, board members and partners, and the participant countries.',
+        'A searchable winners archive organised by year, a media gallery and partnership pages keep the programme visible between ceremonies.',
+      ],
+      tags: ['HTML / CSS', 'JavaScript', 'Responsive web'],
+      platforms: 'Web',
+      services: ['products-and-platforms'],
+      built: ['Online nomination flow with key dates', '15 industries and award categories', 'Ambassadors, board members and partner showcases', 'Participant countries map', 'Searchable winners archive by year', 'Media and gallery section'],
+      from: '#120d05',
+      to: '#8a5a0c',
+      screens: [
+        { src: '/media/portfolio/gia-home.webp', label: 'Home', alt: 'Global Image Award Middle East homepage with Dubai skyline and nominate now button' },
+        { src: '/media/portfolio/gia-industries.webp', label: 'Industries', alt: 'Global Image Award industries grid covering 15 recognised sectors' },
+        { src: '/media/portfolio/gia-winners.webp', label: 'Winners', alt: 'Global Image Award winners archive with search and award year filters' },
       ],
     },
   ],
